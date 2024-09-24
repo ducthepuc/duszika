@@ -13,10 +13,10 @@ Technológiák
 - Backend: Python, Prisma, Flask, Docker
 - Design: Modern, sötét téma, animációkkal és interakciókkal
 
-# Development
-[(Back to top)](#table-of-contents)
+# Fejlesztés
 
-Amit készítünk
+Amit készítünk:
+
 Egy működő kurzusplatformot, amit a jövőben bővíteni tudunk.
 
 Fő funkciók:
