@@ -5,6 +5,7 @@
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/navendu-pottekkat/awesome-readme)](https://img.shields.io/github/issues-pr/navendu-pottekkat/awesome-readme)
 
 Ötlet
+
 Egy interaktív, vizuális tanulási platformot készítünk, amely segít a programozás, főként a Python elsajátításában. A célunk, hogy egy intuitív, felhasználóbarát felületet hozzunk létre, gyakorlati feladatokkal.
 
 Technológiák
