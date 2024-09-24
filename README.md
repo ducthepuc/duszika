@@ -1,10 +1,10 @@
 
 # PyFlare
 
-[![GitHub last commit](https://img.shields.io/github/last-commit/navendu-pottekkat/awesome-readme)](https://img.shields.io/github/last-commit/navendu-pottekkat/awesome-readme)
-[![GitHub pull requests](https://img.shields.io/github/issues-pr/navendu-pottekkat/awesome-readme)](https://img.shields.io/github/issues-pr/navendu-pottekkat/awesome-readme)
+[![GitHub last commit](https://img.shields.io/github/last-commit/ducthepuc/PyFlare)](https://img.shields.io/github/last-commit/ducthepuc/PyFlare)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/ducthepuc/PyFlare)](https://img.shields.io/github/issues-pr/ducthepuc/PyFlare)
 
-Ötlet
+### Ötlet
 
 Egy interaktív, vizuális tanulási platformot készítünk, amely segít a programozás, főként a Python elsajátításában. A célunk, hogy egy intuitív, felhasználóbarát felületet hozzunk létre, gyakorlati feladatokkal.
 
@@ -13,18 +13,17 @@ Technológiák
 - Backend: Python, Prisma, Flask, Docker
 - Design: Modern, sötét téma, animációkkal és interakciókkal
 
-# Fejlesztés
-
-Amit készítünk:
+# Amit készítünk:
 
 Egy működő kurzusplatformot, amit a jövőben bővíteni tudunk.
 
-Fő funkciók:
+### Fő funkciók:
 
 Főoldal: 
 - Üdvözlés
 - Menü
 - Regisztráció/Bejelentkezés
+
 Kurzusok: 
 - Haladáskövetés
 - különböző programozási nyelvek
@@ -35,8 +34,7 @@ Modulok:
 - vizuális kódelemző
 
 Python kurzus részei:
-- Adattípusok
-- változók
+- Adattípusok - változók
 - Vezérlési szerkezetek
 - Függvények
 - Fájlkezelés
@@ -44,3 +42,4 @@ Python kurzus részei:
 
 Terv szerint haladunk, reméljük, több modult is bele tudunk tenni! 😊
 
+### [Dokumentáció](https://docs.google.com/document/d/1dVF7ME7Lu1kb8yrPVwq2rAwDCYW7z3v2hlMMp7ZngNY/edit?usp=sharing)
