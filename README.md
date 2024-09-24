@@ -4,7 +4,7 @@
 [![GitHub last commit](https://img.shields.io/github/last-commit/navendu-pottekkat/awesome-readme)](https://img.shields.io/github/last-commit/navendu-pottekkat/awesome-readme)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/navendu-pottekkat/awesome-readme)](https://img.shields.io/github/issues-pr/navendu-pottekkat/awesome-readme)
 
-Ötlet
+### Ötlet
 
 Egy interaktív, vizuális tanulási platformot készítünk, amely segít a programozás, főként a Python elsajátításában. A célunk, hogy egy intuitív, felhasználóbarát felületet hozzunk létre, gyakorlati feladatokkal.
 
@@ -44,3 +44,4 @@ Python kurzus részei:
 
 Terv szerint haladunk, reméljük, több modult is bele tudunk tenni! 😊
 
+### [Dokumentáció](https://docs.google.com/document/d/1dVF7ME7Lu1kb8yrPVwq2rAwDCYW7z3v2hlMMp7ZngNY/edit?usp=sharing)
