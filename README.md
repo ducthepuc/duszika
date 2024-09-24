@@ -17,7 +17,7 @@ Technológiák
 
 Egy működő kurzusplatformot, amit a jövőben bővíteni tudunk.
 
-Fő funkciók:
+### Fő funkciók:
 
 Főoldal: 
 - Üdvözlés
