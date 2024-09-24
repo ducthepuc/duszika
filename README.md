@@ -25,6 +25,7 @@ Főoldal:
 - Üdvözlés
 - Menü
 - Regisztráció/Bejelentkezés
+
 Kurzusok: 
 - Haladáskövetés
 - különböző programozási nyelvek
@@ -35,8 +36,7 @@ Modulok:
 - vizuális kódelemző
 
 Python kurzus részei:
-- Adattípusok
-- változók
+- Adattípusok - változók
 - Vezérlési szerkezetek
 - Függvények
 - Fájlkezelés
