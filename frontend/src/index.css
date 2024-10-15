@@ -23,9 +23,10 @@ a:hover {
 }
 
 body {
-  margin: 0;
-  display: flex;
+  margin: auto;
+  display: block;
   place-items: center;
+  text-align: center;
   min-width: 320px;
   min-height: 100vh;
 }

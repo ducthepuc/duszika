@@ -1,9 +1,15 @@
-from flask import Flask as flask
-from flask_cors import CORS as cors
+from flask import Flask, request, render_template
 
-app = flask(__name__)
-cors(app)
+app = Flask(__name__)
 
 @app.route('/api/data')
 def get_data():
-    return {"message": "Hello from Flask"}
+    return {"message": "I'm tired of this"}
+
+@app.route('/login', methods=["POST"], strict_slashes=False)
+def login():
+    return{"login"}
+
+@app.route('/register', methods=["POST"], strict_slashes=False)
+def login():
+    return{"regi"}

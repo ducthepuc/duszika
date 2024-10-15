@@ -1,0 +1,17 @@
+img {
+    max-width: 400px;
+    padding: 50px 0 0 0;
+}
+
+#login-button {
+    margin-top: 25px;
+    margin-left: 10px;
+}
+
+#email {
+    margin-bottom: 20px;
+}
+
+#register-button {
+    margin-top: 25px;
+}
