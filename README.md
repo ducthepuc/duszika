@@ -41,3 +41,5 @@ Python kurzus részei:
 - OOP
 
 Terv szerint haladunk, reméljük, több modult is bele tudunk tenni! 😊
+
+Valamikor frissítjük ezt a README-t.....
