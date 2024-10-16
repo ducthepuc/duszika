@@ -18,7 +18,7 @@ function RegisterPage() {
           <label htmlFor="password">Password:</label> <br />
           <input type="password" id="password" name="password" required placeholder="/:" /> <br />
           <input type="password" id="confirm-password" name="confirm-password" required placeholder="repeat /:" /> <br />
-          <button id="discord-auth-button">Login<img src="https://i1.wp.com/clipartcraft.com/images/discord-logo-transparent-white-9.png" alt="DC icon" id="discord-logo" /></button>
+          <button id="discord-auth-button">Create<img src="https://i1.wp.com/clipartcraft.com/images/discord-logo-transparent-white-9.png" alt="DC icon" id="discord-logo" /></button>
           <button type="submit" id="register-button">Create➢</button> <br />
           <p>Already have an account? <Link to="/login">Login!</Link></p>
         </div>
