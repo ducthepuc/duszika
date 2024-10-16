@@ -12,10 +12,11 @@ function Login() {
       <h1>Login</h1>
       <div id="login-fieldset">
         <div id="login-background">
-          <label htmlFor="email">Enter your email address:</label> <br></br>
-          <input type="email" id="email" name="email" required placeholder='E-mail' /> <br></br>
-          <label htmlFor="password">Password:</label> <br></br>
-          <input type="password" id="password" name="password" required placeholder='Password' /> <br></br>
+          <label htmlFor="email">Enter your email address:</label> <br />
+          <input type="email" id="email" name="email" required placeholder='E-mail' /> <br />
+          <label htmlFor="password">Password:</label> <br />
+          <input type="password" id="password" name="password" required placeholder='Password' /> <br />
+          <button id="discord-auth-button">Login<img src="https://i1.wp.com/clipartcraft.com/images/discord-logo-transparent-white-9.png" alt="DC icon" id="discord-logo" /></button>
           <button type="submit" id="login-button">Login</button>
           <p>Don't have an account yet? <Link to="/register">Create one!</Link></p>
         </div>
