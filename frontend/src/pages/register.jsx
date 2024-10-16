@@ -12,13 +12,14 @@ function RegisterPage() {
       <div id="register-fieldset">
         <div id="register-background">
           <label htmlFor="username"></label> <br />
-          <input type="name" id="username" name="username" required placeholder="/:"></input>
+          <input type="name" id="username" name="username" required placeholder="/:"></input> <br />
           <label htmlFor="email">Enter your email address:</label> <br />
           <input type="email" id="email" name="email" required placeholder="/:" /> <br />
           <label htmlFor="password">Password:</label> <br />
           <input type="password" id="password" name="password" required placeholder="/:" /> <br />
           <input type="password" id="confirm-password" name="confirm-password" required placeholder="repeat /:" /> <br />
-          <button type="submit" id="register-button">Register account</button>
+          <button id="discord-auth-button">Login<img src="https://i1.wp.com/clipartcraft.com/images/discord-logo-transparent-white-9.png" alt="DC icon" id="discord-logo" /></button>
+          <button type="submit" id="register-button">Create➢</button> <br />
           <p>Already have an account? <Link to="/login">Login!</Link></p>
         </div>
       </div>
