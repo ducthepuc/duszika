@@ -11,11 +11,13 @@ function RegisterPage() {
       <h1>Register</h1>
       <div id="register-fieldset">
         <div id="register-background">
+          <label htmlFor="username"></label> <br />
+          <input type="name" id="username" name="username" required placeholder="/:"></input>
           <label htmlFor="email">Enter your email address:</label> <br />
-          <input type="email" id="email" name="email" required placeholder='E-mail' /> <br />
+          <input type="email" id="email" name="email" required placeholder="/:" /> <br />
           <label htmlFor="password">Password:</label> <br />
-          <input type="password" id="password" name="password" required placeholder='Password' /> <br />
-          <input type="password" id="confirm-password" name="confirm-password" required placeholder='Repeat password' /> <br />
+          <input type="password" id="password" name="password" required placeholder="/:" /> <br />
+          <input type="password" id="confirm-password" name="confirm-password" required placeholder="repeat /:" /> <br />
           <button type="submit" id="register-button">Register account</button>
           <p>Already have an account? <Link to="/login">Login!</Link></p>
         </div>
