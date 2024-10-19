@@ -17,10 +17,10 @@ function Login() {
             <input type="email" id="email" name="email" required placeholder='E-mail' /> <br />
             <label htmlFor="password">Password:</label> <br />
             <input type="password" id="password" name="password" required placeholder='Password' /> <br />
-            <button id="discord-auth-button">Login<img src="https://i1.wp.com/clipartcraft.com/images/discord-logo-transparent-white-9.png" alt="DC icon" id="discord-logo" /></button>
             <button type="submit" id="login-button">Login</button>
-            <p>Don't have an account yet? <Link to="/register">Create one!</Link></p>
           </form>
+          <button id="discord-auth-button">Login<img src="https://i1.wp.com/clipartcraft.com/images/discord-logo-transparent-white-9.png" alt="DC icon" id="discord-logo" /></button>
+          <p>Don't have an account yet? <Link to="/register">Create one!</Link></p>
         </div>
       </div>
     </>
