@@ -1,11 +1,13 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Link } from 'react-router-dom';
 import '../login-register.css';
 
 function RegisterPage() {
   const [formData, setFormData] = useState({
     name: '',
-    email: ''
+    email: '',
+    password: '',
+    confirm_password: ''
 });
 
   const handleChange = (e) => {
@@ -17,7 +19,7 @@ function RegisterPage() {
 
   const handleSubmit = async (e) => {
       e.preventDefault();
-      const response = await fetch('http://localhost:5000/submit-form', {
+      const response = await fetch('http://localhost:5000/api/user_make:def', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',
@@ -36,13 +38,14 @@ function RegisterPage() {
       <div id="register-fieldset">
         <div id="register-background">
           <form onSubmit={handleSubmit}>
-            <label htmlFor="username"></label> <br />
-            <input type="name" id="username" value={formData.name} onChange={handleChange} name="username" required placeholder="/:"></input> <br />
+            <label htmlFor="username">Username:</label> <br />
+            <input type="text" id="username" defaultValue={formData.name}
+                   onChange={handleChange} name="username" required placeholder="/:"></input> <br />
             <label htmlFor="email">Enter your email address:</label> <br />
             <input type="email" id="email" value={formData.email}  onChange={handleChange}name="email" required placeholder="/:" /> <br />
             <label htmlFor="password">Password:</label> <br />
             <input type="password" id="password" value={formData.password}  onChange={handleChange} name="password" required placeholder="/:" /> <br />
-            <input type="password" id="confirm-password" name="confirm-password" required placeholder="repeat /:" /> <br />
+            <input type="password" id="confirm_password" value={formData.confirm_password} onChange={handleChange} name="confirm_password" required placeholder="repeat /:" /> <br />
             <button type="submit" id="register-button">Create➢</button> <br />
           </form>
           <button id="discord-auth-button">Create<img src="https://i1.wp.com/clipartcraft.com/images/discord-logo-transparent-white-9.png" alt="DC icon" id="discord-logo" /></button>
