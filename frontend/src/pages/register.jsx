@@ -48,7 +48,7 @@ function RegisterPage() {
             <input type="password" id="confirm_password" value={formData.confirm_password} onChange={handleChange} name="confirm_password" required placeholder="repeat /:" /> <br />
             <button type="submit" id="register-button">Create➢</button> <br />
           </form>
-          <button id="discord-auth-button">Create dc</button>
+          <button id="discord-auth-button">Create<img src="https://i1.wp.com/clipartcraft.com/images/discord-logo-transparent-white-9.png" alt="DC icon" id="discord-logo" /></button>
           <p>Already have an account? <Link to="/login">Login!</Link></p>
         </div>
       </div>
