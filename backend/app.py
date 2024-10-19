@@ -1,15 +1,15 @@
-from flask import Flask, request, render_template
+import flask as f
+from flask_cors import CORS
+from auth_manager import auth_bp
+from dbmanager import cursor
 
-app = Flask(__name__)
+app = f.Flask(__name__)
+CORS(app, resources={"/api/*": {"origins": ["http://localhost:5173"]}})
 
-@app.route('/api/data')
-def get_data():
-    return {"message": "I'm tired of this"}
 
-@app.route('/login', methods=["POST"], strict_slashes=False)
-def login():
-    return{"login"}
+app.config["CORS_ORIGINS"] = ["http://localhost:5173"]
+app.register_blueprint(auth_bp)
 
-@app.route('/register', methods=["POST"], strict_slashes=False)
-def login():
-    return{"regi"}
+
+if __name__ == '__main__':
+    app.run(debug=True, use_reloader=False)

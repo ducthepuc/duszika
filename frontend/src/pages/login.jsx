@@ -19,7 +19,7 @@ function Login() {
             <input type="password" id="password" name="password" required placeholder='Password' /> <br />
             <button type="submit" id="login-button">Login</button>
           </form>
-          <button id="discord-auth-button">Login<img src="https://i1.wp.com/clipartcraft.com/images/discord-logo-transparent-white-9.png" alt="DC icon" id="discord-logo" /></button>
+          <button id="discord-auth-button">Login dc</button>
           <p>Don't have an account yet? <Link to="/register">Create one!</Link></p>
         </div>
       </div>

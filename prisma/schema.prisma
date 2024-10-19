@@ -3,14 +3,28 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
-model user {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
+model Profile {
+  id         Int       @id @unique @default(autoincrement())
+  username   String?   @unique @db.VarChar(15)
+  description String?  @db.VarChar(75)
+  streak     Int?      @db.TinyInt
+
+  Account    User[]
+}
+
+model User {
+  id               Int      @id @default(autoincrement())
+  isDiscord        Boolean  @db.Bit(1)
+  profile_id       Int      @unique
+  registration_id  Int      @unique
+  token            String   @unique @db.VarChar(30)
+  username         String   @unique @db.VarChar(15)
+  joined           DateTime
+  isAccountValid   Boolean? @db.Bit(1)
+
+  Profile          Profile   @relation(fields: [profile_id], references: [id])
 }
