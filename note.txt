@@ -1,0 +1,2 @@
+Backend doesn't run if login and register is in app.py without being used. (feature currently in-dev)
+Also use SQL instead of Mongodb. 
