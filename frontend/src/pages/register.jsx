@@ -3,6 +3,30 @@ import { Link } from 'react-router-dom';
 import '../login-register.css';
 
 function RegisterPage() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: ''
+});
+
+  const handleChange = (e) => {
+      setFormData({
+          ...formData,
+          [e.target.name]: e.target.value
+      });
+  };
+
+  const handleSubmit = async (e) => {
+      e.preventDefault();
+      const response = await fetch('http://localhost:5000/submit-form', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+      });
+      const data = await response.json();
+      console.log(data);
+  };
   return (
     <>
       <div id="branding">
@@ -11,13 +35,13 @@ function RegisterPage() {
       <h1>Register</h1>
       <div id="register-fieldset">
         <div id="register-background">
-          <form action="/api/user_make:def">
+          <form onSubmit={handleSubmit}>
             <label htmlFor="username"></label> <br />
-            <input type="name" id="username" name="username" required placeholder="/:"></input> <br />
+            <input type="name" id="username" value={formData.name} onChange={handleChange} name="username" required placeholder="/:"></input> <br />
             <label htmlFor="email">Enter your email address:</label> <br />
-            <input type="email" id="email" name="email" required placeholder="/:" /> <br />
+            <input type="email" id="email" value={formData.email}  onChange={handleChange}name="email" required placeholder="/:" /> <br />
             <label htmlFor="password">Password:</label> <br />
-            <input type="password" id="password" name="password" required placeholder="/:" /> <br />
+            <input type="password" id="password" value={formData.password}  onChange={handleChange} name="password" required placeholder="/:" /> <br />
             <input type="password" id="confirm-password" name="confirm-password" required placeholder="repeat /:" /> <br />
             <button type="submit" id="register-button">Create➢</button> <br />
           </form>
