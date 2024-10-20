@@ -1,8 +1,8 @@
 
 # PyFlare
 
-[![GitHub last commit](https://img.shields.io/github/last-commit/ducthepuc/PyFlare)](https://img.shields.io/github/last-commit/ducthepuc/PyFlare)
-[![GitHub pull requests](https://img.shields.io/github/issues-pr/ducthepuc/PyFlare)](https://img.shields.io/github/issues-pr/ducthepuc/PyFlare)
+[![GitHub last commit](https://img.shields.io/github/last-commit/ducthepuc/PyFlare)](https://img.shields.io/github/last-commit/ducthepuc/Flare)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/ducthepuc/PyFlare)](https://img.shields.io/github/issues-pr/ducthepuc/Flare)
 
 ### Ötlet
 
