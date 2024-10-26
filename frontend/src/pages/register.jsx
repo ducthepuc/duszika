@@ -30,29 +30,26 @@ function RegisterPage() {
       console.log(data);
   };
   return (
-    <>
-      <div id="branding">
-        <img src="https://s3-alpha.figma.com/hub/file/4093188630/561dfe3e-e5f8-415c-9b26-fbdf94897722-cover.png" alt="branding" />
-      </div>
-      <h1>Register</h1>
-      <div id="register-fieldset">
-        <div id="register-background">
+    <body>
+      <div id="fieldset-wrapper">
+        <h1 id="title">Register</h1>
+        <p>Already have an account? <Link id="link" to="/login">Login!</Link></p> <br />
+        <div id="register-fieldset">
           <form onSubmit={handleSubmit}>
-            <label htmlFor="username">Username:</label> <br />
+            <label htmlFor="username">username</label> <br />
             <input type="text" id="username" defaultValue={formData.name}
-                   onChange={handleChange} name="username" required placeholder="/:"></input> <br />
-            <label htmlFor="email">Enter your email address:</label> <br />
+                    onChange={handleChange} name="username" required placeholder="/:"></input> <br />
+            <label htmlFor="email">e-mail</label> <br />
             <input type="email" id="email" value={formData.email}  onChange={handleChange}name="email" required placeholder="/:" /> <br />
-            <label htmlFor="password">Password:</label> <br />
+            <label htmlFor="password">password</label> <br />
             <input type="password" id="password" value={formData.password}  onChange={handleChange} name="password" required placeholder="/:" /> <br />
             <input type="password" id="confirm_password" value={formData.confirm_password} onChange={handleChange} name="confirm_password" required placeholder="repeat /:" /> <br />
-            <button type="submit" id="register-button">Create➢</button> <br />
+            <button type="submit" id="register-button">CREATE➢</button>
           </form>
-          <button id="discord-auth-button">Create<img src="https://i1.wp.com/clipartcraft.com/images/discord-logo-transparent-white-9.png" alt="DC icon" id="discord-logo" /></button>
-          <p>Already have an account? <Link to="/login">Login!</Link></p>
+          <button id="discord-auth-button"><img src='../assets/discord.png' alt="Discord Icon"  width="200" height="50"/></button>
         </div>
       </div>
-    </>
+    </body>
   );
 }
 

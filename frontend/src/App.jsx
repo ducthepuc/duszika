@@ -3,18 +3,23 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "r
 import DataFetcher from './components/DataFetcher';
 import Login from './pages/login';
 import RegisterPage from './pages/register';
+import Creator from './pages/creator';
 
 function AppContent() {
   const navigate = useNavigate();
   const navigateToLogin = () => {
     navigate('/login');
   };
+    const navigateToCreator = () => {
+        navigate('/creator');
+    };
 
   return (
     <div className="App">
       <h1>FlareHub is under construction</h1>
       <a href="https://github.com/ducthepuc/PyFlare" target="_blank" rel="noopener noreferrer">Read more here</a>
       <button onClick={navigateToLogin} id="panel-button">My panel</button>
+      <button onClick={navigateToCreator} id="login-button">Create</button>
       <DataFetcher />
     </div>
   );
@@ -27,6 +32,7 @@ function App() {
         <Route path="/" element={<AppContent />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/creator" element={<Creator />} />
       </Routes>
     </Router>
   );
