@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import DataFetcher from '../components/DataFetcher';
 import '../login-register.css';
+import discordImage from '../assets/discord.png';
 
 function Login() {
   return (
@@ -18,7 +19,9 @@ function Login() {
               <p  id='error-field'></p> <br />
               <button type="submit" id="login-button">LOGIN➢</button> 
             </form>
-            <button id="discord-auth-button"><img src='../assets/discord.png' alt="Discord Icon"  width="200" height="50"/></button>
+            <button id="discord-auth-button">
+              <img src={discordImage} alt="Discord Icon"/>
+            </button>
           </div>
         </div>
     </body>

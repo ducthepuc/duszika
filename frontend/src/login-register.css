@@ -38,6 +38,11 @@ p {
 #link {
     color: #f7931e;
     text-decoration: underline;
+    transition: 0.3s;
+}
+
+#link:hover {
+    color: white;
 }
 
 input {
@@ -67,7 +72,8 @@ button {
     cursor: pointer;
     transition: border-color 0.25s;
     width: 30%;
-    height: 1fr;
+    height: 5vh;
+    margin-top:  1pt
   }
   button:hover {
     border-color: #f15a24;
@@ -77,3 +83,18 @@ button {
   button:focus-visible {
     outline: 4px auto -webkit-focus-ring-color;
   }
+
+#discord-auth-button {
+    background-color: white;
+    color: black;
+    border-color: #5864f1;
+}
+
+#discord-auth-button:hover {
+    border-color: #f15a24;
+}
+
+img {
+    width: 100%;
+    height: auto;
+}

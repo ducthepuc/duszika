@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { Link } from 'react-router-dom';
 import '../login-register.css';
+import discordImage from '../assets/discord.png';
 
 function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -38,15 +39,17 @@ function RegisterPage() {
           <form onSubmit={handleSubmit}>
             <label htmlFor="username">username</label> <br />
             <input type="text" id="username" defaultValue={formData.name}
-                    onChange={handleChange} name="username" required placeholder="/:"></input> <br />
+                    onChange={handleChange} name="username" required placeholder=":/"></input> <br />
             <label htmlFor="email">e-mail</label> <br />
-            <input type="email" id="email" value={formData.email}  onChange={handleChange}name="email" required placeholder="/:" /> <br />
+            <input type="email" id="email" value={formData.email}  onChange={handleChange}name="email" required placeholder=":/" /> <br />
             <label htmlFor="password">password</label> <br />
-            <input type="password" id="password" value={formData.password}  onChange={handleChange} name="password" required placeholder="/:" /> <br />
-            <input type="password" id="confirm_password" value={formData.confirm_password} onChange={handleChange} name="confirm_password" required placeholder="repeat /:" /> <br />
+            <input type="password" id="password" value={formData.password}  onChange={handleChange} name="password" required placeholder=":/" /> <br />
+            <input type="password" id="confirm_password" value={formData.confirm_password} onChange={handleChange} name="confirm_password" required placeholder="repeat :/" /> <br />
             <button type="submit" id="register-button">CREATE➢</button>
           </form>
-          <button id="discord-auth-button"><img src='../assets/discord.png' alt="Discord Icon"  width="200" height="50"/></button>
+          <button id="discord-auth-button">
+            <img src={discordImage} alt="Discord Icon"/>
+          </button>
         </div>
       </div>
     </body>
