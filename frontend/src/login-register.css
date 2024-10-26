@@ -16,7 +16,7 @@ html, body {
     display: flex;
     flex-direction: column;
     flex-flow: column;
-    flex-wrap: wrap;
+    flex-wrap: no-wrap;
     background-color: #333333;
     outline: solid  4pt #f15a24;
     border-radius: 20pt;
@@ -25,13 +25,13 @@ html, body {
 }
 
 #title  {
-    margin: 0 auto -25pt auto;
+    margin: 0 auto -30pt auto;
     padding: 0.5em 1em;
     font-size: 45pt;
 }
 
 p {
-    margin: 0 auto -5pt auto;
+    margin: 0 auto -15pt auto;
     font-size: 20pt;
 }
 
@@ -67,7 +67,7 @@ button {
     cursor: pointer;
     transition: border-color 0.25s;
     width: 30%;
-    height: 6vh;
+    height: 1fr;
   }
   button:hover {
     border-color: #f15a24;
