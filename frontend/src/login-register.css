@@ -1,17 +1,79 @@
-img {
-    max-width: 400px;
-    padding: 50px 0 0 0;
+html, body {
+    display: block;
+    padding: 0;
+    height: 100vh;
+    width: 100vh;
+    margin: 0 auto 0 auto;
+    justify-content: center;
+    align-content: center;
+    background-color: rgb(20,  20, 20)  !important;
 }
 
-#login-button {
-    margin-top: 25px;
-    margin-left: 10px;
+#fieldset-wrapper {
+    margin: 0;
+    height: 65%;
+    width: 65%;
+    display: flex;
+    flex-direction: column;
+    flex-flow: column;
+    flex-wrap: wrap;
+    background-color: #333333;
+    outline: solid  4pt #f15a24;
+    border-radius: 20pt;
+    gap: 1em;
+    aspect-ratio: 1/1;
 }
 
-#email {
-    margin-bottom: 20px;
+#title  {
+    margin: 0 auto -25pt auto;
+    padding: 0.5em 1em;
+    font-size: 45pt;
 }
 
-#register-button {
-    margin-top: 25px;
+p {
+    margin: 0 auto -5pt auto;
+    font-size: 20pt;
 }
+
+#link {
+    color: #f7931e;
+    text-decoration: underline;
+}
+
+input {
+    width: 60%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #f15a24;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 18pt;
+}
+
+input:hover {
+    border: 1px solid whitesmoke;
+}
+
+
+button {
+    border-radius: 8px;
+    border: 1px solid transparent;
+    padding: 0.6em 1.2em;
+    font-size: 12pt;
+    font-weight: 500;
+    font-family: inherit;
+    background-color: #1a1a1a;
+    cursor: pointer;
+    transition: border-color 0.25s;
+    width: 30%;
+    height: 6vh;
+  }
+  button:hover {
+    border-color: #f15a24;
+    background-color: rgb(35,35,35);
+  }
+  button:focus,
+  button:focus-visible {
+    outline: 4px auto -webkit-focus-ring-color;
+  }

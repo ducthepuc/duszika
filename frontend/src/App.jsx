@@ -14,7 +14,7 @@ function AppContent() {
     <div className="App">
       <h1>FlareHub is under construction</h1>
       <a href="https://github.com/ducthepuc/PyFlare" target="_blank" rel="noopener noreferrer">Read more here</a>
-      <button onClick={navigateToLogin} id="panel-button">My panel</button>
+      <button onClick={navigateToLogin} id="panel-button">Account</button>
       <DataFetcher />
     </div>
   );
