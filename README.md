@@ -10,7 +10,7 @@ Egy interaktív, vizuális tanulási platformot készítünk, amely segít a pro
 
 Technológiák
 - Frontend: HTML, CSS, JavaScript, React, Vite
-- Backend: Python, Prisma, Flask, Docker
+- Backend: Python, Prisma, Flask, Dokkkker
 - Design: Modern, sötét téma, animációkkal és interakciókkal
 
 # Amit készítünk:

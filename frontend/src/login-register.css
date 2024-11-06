@@ -67,7 +67,12 @@ button {
     cursor: pointer;
     transition: border-color 0.25s;
     width: 30%;
+<<<<<<< HEAD
     height: 1fr;
+=======
+    height: 5vh;
+    margin-top:  1pt
+>>>>>>> fd59cd70c8aeb460a7e554a8133fd5db56f0d226
   }
   button:hover {
     border-color: #f15a24;
@@ -77,3 +82,21 @@ button {
   button:focus-visible {
     outline: 4px auto -webkit-focus-ring-color;
   }
+<<<<<<< HEAD
+=======
+
+#discord-auth-button {
+    background-color: white;
+    color: black;
+    border-color: #5864f1;
+}
+
+#discord-auth-button:hover {
+    border-color: #f15a24;
+}
+
+img {
+    width: 100%;
+    height: auto;
+}
+>>>>>>> fd59cd70c8aeb460a7e554a8133fd5db56f0d226
