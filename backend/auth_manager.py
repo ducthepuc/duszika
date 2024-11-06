@@ -3,10 +3,19 @@ import dbmanager as dbm
 
 auth_bp = Blueprint('auth', __name__)
 
-
 @auth_bp.route('/api/uauth:def', methods=["POST"])
 def user_auth():
-    return {"login"}
+    data = request.json
+    email = data.get('email')
+    password = data.get('password')
+
+    try:
+        user = dbm.login_user_via_auth(email, password)
+        print(user)
+        return {"result": True, "reason": "Cuz you put everything in correctly!",
+                "data": {"username": user[5], "token": user[4], "id": user[0]}}
+    except Exception as e:
+        return {"result": False, "reason": str(e), "data": {}}
 
 
 @auth_bp.route('/api/user_make:def', methods=["POST"])
@@ -16,9 +25,6 @@ def user_registry():
     email = request_data.get('email')
     pwd = request_data.get('password')
     pwd2 = request_data.get('confirm_password')
-
-    print(pwd, pwd2)
-
 
     try:
         dbm.add_user(uname, pwd, pwd2, email, False, None)

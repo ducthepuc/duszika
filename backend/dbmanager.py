@@ -62,4 +62,38 @@ def add_user(name, password, pw2, user_email, is_discord, discord_data: DCData):
     sql.commit()
 
 
+def get_user(id):
+    cursor.execute("SELECT * FROM user WHERE id = %s", (id))
+    row = cursor.fetchone()
+
+    return row
+
+
+def change_password(id, password):
+    user = get_user(id)
+
+
+def login_user_via_auth(email, password):
+    password = sha256(password.encode('utf-8')).hexdigest()
+
+    cursor.execute("SELECT * FROM classical_registration WHERE email = %s AND password = %s",
+                   (email, password))
+    registration_data = cursor.fetchone()
+    if registration_data is None:
+        raise ValueError("Password or email is wrong!")
+    registration_id = registration_data[0]
+    cursor.execute("SELECT * FROM user WHERE registration_id = %s", (registration_id,))
+    user = cursor.fetchone()
+    if user is None:
+        raise ValueError("User not found!")
+
+    return user
+
+
+def get_user(token):
+    cursor.execute("SELECT * FROM user WHERE token = %s", (token))
+    row = cursor.fetchone()
+
+    return row
+
 # cursor.close()
