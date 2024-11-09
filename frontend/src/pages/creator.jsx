@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import './creator.scss';
 
 function CourseCreator() {
     const [title, setTitle] = useState('');
@@ -13,10 +14,10 @@ function CourseCreator() {
     const addStep = (type) => {
         const newStep = {
             type,
-            instruction: '',
-            question: '',
-            answers: type === 'regular' ? [''] : [],
-            correctAnswer: type === 'true-false' ? null : [],
+            content: type === 'lesson' ? [{ type: 'text-block', text: '' }] : [],
+            questionText: '',
+            questionType: type === 'true-false' ? 'true-false' : 'multiple-choice',
+            answers: [],
         };
         setSteps([...steps, newStep]);
         setIsDropdownOpen(false);
@@ -28,9 +29,9 @@ function CourseCreator() {
         setSteps(newSteps);
     };
 
-    const addAnswerOption = (index) => {
+    const addAnswerOption = (stepIndex) => {
         const newSteps = [...steps];
-        newSteps[index].answers.push('');
+        newSteps[stepIndex].answers.push({ text: '', correct: false });
         setSteps(newSteps);
     };
 
@@ -42,22 +43,13 @@ function CourseCreator() {
 
     const handleAnswerChange = (stepIndex, answerIndex, value) => {
         const newSteps = [...steps];
-        newSteps[stepIndex].answers[answerIndex] = value;
+        newSteps[stepIndex].answers[answerIndex].text = value;
         setSteps(newSteps);
     };
 
     const toggleCorrectAnswer = (stepIndex, answerIndex) => {
         const newSteps = [...steps];
-        if (newSteps[stepIndex].type === 'single-choice') {
-            newSteps[stepIndex].correctAnswer = answerIndex;
-        } else if (newSteps[stepIndex].type === 'multiple-choice') {
-            const correctAnswers = newSteps[stepIndex].correctAnswer;
-            if (correctAnswers.includes(answerIndex)) {
-                newSteps[stepIndex].correctAnswer = correctAnswers.filter(i => i !== answerIndex);
-            } else {
-                newSteps[stepIndex].correctAnswer.push(answerIndex);
-            }
-        }
+        newSteps[stepIndex].answers[answerIndex].correct = !newSteps[stepIndex].answers[answerIndex].correct;
         setSteps(newSteps);
     };
 
@@ -65,6 +57,43 @@ function CourseCreator() {
         const newSteps = [...steps];
         newSteps.splice(stepIndex, 1);
         setSteps(newSteps);
+    };
+
+    const saveCourse = () => {
+        const courseData = {
+            title,
+            description,
+            elements: steps.map(step => {
+                if (step.type === 'lesson') {
+                    return {
+                        type: 'lesson',
+                        content: step.content.map(contentItem => ({
+                            type: contentItem.type,
+                            text: contentItem.text,
+                        })),
+                    };
+                } else if (step.type === 'question') {
+                    return {
+                        type: 'question',
+                        questionType: step.questionType,
+                        questionText: step.questionText,
+                        answers: step.answers.map(answer => ({
+                            text: answer.text,
+                            correct: answer.correct,
+                        })),
+                    };
+                }
+            }),
+        };
+
+        const courseJson = JSON.stringify(courseData, null, 2);
+        const blob = new Blob([courseJson], { type: 'application/json' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `${title || 'course'}.json`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     };
 
     return (
@@ -87,108 +116,45 @@ function CourseCreator() {
                 <div key={stepIndex} style={{ border: '1px solid #ddd', margin: '10px', padding: '10px' }}>
                     <button onClick={() => removeStep(stepIndex)} style={{ float: 'right', color: 'red' }}>Delete Step</button>
 
-                    {step.type === 'regular' && (
+                    {step.type === 'lesson' && (
                         <div>
-                            <h3>Instruction + Multiple Answers</h3>
-                            <textarea
-                                placeholder="Instruction"
-                                value={step.instruction}
-                                onChange={(e) => handleStepChange(stepIndex, 'instruction', e.target.value)}
-                            />
-                            {step.answers.map((answer, answerIndex) => (
-                                <div key={answerIndex} style={{ display: 'flex', alignItems: 'center' }}>
-                                    <input
-                                        type="text"
-                                        placeholder={`Acceptable Answer ${answerIndex + 1}`}
-                                        value={answer}
-                                        onChange={(e) => handleAnswerChange(stepIndex, answerIndex, e.target.value)}
+                            <h3>Lesson Content</h3>
+                            {step.content.map((contentItem, contentIndex) => (
+                                <div key={contentIndex} style={{ marginBottom: '10px' }}>
+                                    <textarea
+                                        placeholder="Lesson Text"
+                                        value={contentItem.text}
+                                        onChange={(e) => {
+                                            const newSteps = [...steps];
+                                            newSteps[stepIndex].content[contentIndex].text = e.target.value;
+                                            setSteps(newSteps);
+                                        }}
                                     />
-                                    <button onClick={() => removeAnswerOption(stepIndex, answerIndex)} style={{ color: 'red', marginLeft: '5px' }}>X</button>
                                 </div>
                             ))}
-                            <button onClick={() => addAnswerOption(stepIndex)}>Add Another Acceptable Answer</button>
                         </div>
                     )}
 
-                    {step.type === 'true-false' && (
+                    {step.type === 'question' && (
                         <div>
-                            <h3>True/False Question</h3>
+                            <h3>{step.questionType === 'true-false' ? 'True/False Question' : 'Multiple Choice Question'}</h3>
                             <input
                                 type="text"
-                                placeholder="Question"
-                                value={step.question}
-                                onChange={(e) => handleStepChange(stepIndex, 'question', e.target.value)}
-                            />
-                            <div>
-                                <label>
-                                    <input
-                                        type="radio"
-                                        checked={step.correctAnswer === true}
-                                        onChange={() => handleStepChange(stepIndex, 'correctAnswer', true)}
-                                    />
-                                    True
-                                </label>
-                                <label>
-                                    <input
-                                        type="radio"
-                                        checked={step.correctAnswer === false}
-                                        onChange={() => handleStepChange(stepIndex, 'correctAnswer', false)}
-                                    />
-                                    False
-                                </label>
-                            </div>
-                        </div>
-                    )}
-
-                    {step.type === 'single-choice' && (
-                        <div>
-                            <h3>Single-Choice Question</h3>
-                            <input
-                                type="text"
-                                placeholder="Question"
-                                value={step.question}
-                                onChange={(e) => handleStepChange(stepIndex, 'question', e.target.value)}
+                                placeholder="Question Text"
+                                value={step.questionText}
+                                onChange={(e) => handleStepChange(stepIndex, 'questionText', e.target.value)}
                             />
                             {step.answers.map((answer, answerIndex) => (
                                 <div key={answerIndex} style={{ display: 'flex', alignItems: 'center' }}>
                                     <input
                                         type="text"
                                         placeholder={`Answer ${answerIndex + 1}`}
-                                        value={answer}
+                                        value={answer.text}
                                         onChange={(e) => handleAnswerChange(stepIndex, answerIndex, e.target.value)}
                                     />
                                     <input
-                                        type="radio"
-                                        checked={step.correctAnswer === answerIndex}
-                                        onChange={() => toggleCorrectAnswer(stepIndex, answerIndex)}
-                                    />
-                                    <button onClick={() => removeAnswerOption(stepIndex, answerIndex)} style={{ color: 'red', marginLeft: '5px' }}>X</button>
-                                </div>
-                            ))}
-                            <button onClick={() => addAnswerOption(stepIndex)}>Add Answer Option</button>
-                        </div>
-                    )}
-
-                    {step.type === 'multiple-choice' && (
-                        <div>
-                            <h3>Multiple-Choice Question</h3>
-                            <input
-                                type="text"
-                                placeholder="Question"
-                                value={step.question}
-                                onChange={(e) => handleStepChange(stepIndex, 'question', e.target.value)}
-                            />
-                            {step.answers.map((answer, answerIndex) => (
-                                <div key={answerIndex} style={{ display: 'flex', alignItems: 'center' }}>
-                                    <input
-                                        type="text"
-                                        placeholder={`Answer ${answerIndex + 1}`}
-                                        value={answer}
-                                        onChange={(e) => handleAnswerChange(stepIndex, answerIndex, e.target.value)}
-                                    />
-                                    <input
-                                        type="checkbox"
-                                        checked={step.correctAnswer.includes(answerIndex)}
+                                        type={step.questionType === 'true-false' ? 'radio' : 'checkbox'}
+                                        checked={answer.correct}
                                         onChange={() => toggleCorrectAnswer(stepIndex, answerIndex)}
                                     />
                                     <button onClick={() => removeAnswerOption(stepIndex, answerIndex)} style={{ color: 'red', marginLeft: '5px' }}>X</button>
@@ -213,15 +179,13 @@ function CourseCreator() {
                         padding: '8px 0',
                         borderRadius: '4px',
                     }}>
-                        <div onClick={() => addStep('regular')} style={{ padding: '8px', cursor: 'pointer' }}>Regular (Instruction + Answer)</div>
-                        <div onClick={() => addStep('true-false')} style={{ padding: '8px', cursor: 'pointer' }}>True/False Question</div>
-                        <div onClick={() => addStep('single-choice')} style={{ padding: '8px', cursor: 'pointer' }}>Single-Choice Question</div>
-                        <div onClick={() => addStep('multiple-choice')} style={{ padding: '8px', cursor: 'pointer' }}>Multiple-Choice Question</div>
+                        <div onClick={() => addStep('lesson')} style={{ padding: '8px', cursor: 'pointer' }}>Lesson</div>
+                        <div onClick={() => addStep('question')} style={{ padding: '8px', cursor: 'pointer' }}>Question</div>
                     </div>
                 )}
             </div>
 
-            <button onClick={() => console.log('Saving Course...')}>Save Course</button>
+            <button onClick={saveCourse}>Save Course</button>
         </div>
     );
 }
