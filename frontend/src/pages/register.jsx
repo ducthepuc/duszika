@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import { Link } from 'react-router-dom';
 import '../login-register.css';
-import discordImage from '../assets/discord.png';
 
 function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -47,7 +46,6 @@ function RegisterPage() {
             <input type="password" id="confirm_password" value={formData.confirm_password} onChange={handleChange} name="confirm_password" required placeholder="repeat /:" /> <br />
             <button type="submit" id="register-button">CREATE➢</button>
           </form>
-          <button id="discord-auth-button"><img src='../assets/discord.png' alt="Discord Icon"  width="200" height="50"/></button>
         </div>
       </div>
     </body>

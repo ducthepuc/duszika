@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../login-register.css';
-import discordImage from '../assets/discord.png';
 
 function Login() {
   // State hooks to manage form input and error messages
@@ -39,6 +38,7 @@ function Login() {
       }
     } catch (err) {
       // Handle unexpected errors (e.g., network issues)
+
       setError('Something went wrong, please try again.');
     } finally {
       setLoading(false);  // Set loading to false when the request completes
@@ -80,7 +80,6 @@ function Login() {
               </button>
             </form>
             <button id="discord-auth-button">
-              <img src="../assets/discord.png" alt="Discord Icon" width="200" height="50" />
             </button>
           </div>
         </div>
