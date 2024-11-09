@@ -52,7 +52,7 @@ function Login() {
           <p>Don't have an account yet? <Link id="link" to="/register">Register!</Link></p> <br />
           <div id="login-fieldset">
             <form onSubmit={handleLogin}>
-              <label htmlFor="email">E-mail</label> <br />
+              <label htmlFor="email">e-mail</label> <br />
               <input
                 type="email"
                 id="email"
@@ -60,9 +60,9 @@ function Login() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}  /* Bind email input */
-                placeholder="Enter your email"
+                placeholder="/:"
               /> <br />
-              <label htmlFor="password">Password</label> <br />
+              <label htmlFor="password">password</label> <br />
               <input
                 type="password"
                 id="password"
@@ -70,7 +70,7 @@ function Login() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}  /* Bind password input */
-                placeholder="Enter your password"
+                placeholder="/:"
               /> <br />
               {error && <p id="error-field">{error}</p>}
               <br />
