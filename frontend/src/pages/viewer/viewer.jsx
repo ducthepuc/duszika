@@ -131,6 +131,7 @@ const courseData = {
 }
 
 function Viewer() {
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState({});
   const [score, setScore] = useState(0);
 
@@ -158,58 +159,76 @@ function Viewer() {
     console.log(totalScore);
   };
 
-  return (
-    <div>
-      <h1>{courseData.title}</h1>
-      <p>{courseData.description}</p>
+  const handleNext = () => {
+    if (currentIndex < courseData.elements.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    }
+  };
 
-      {courseData.elements.map((element, index) => {
-        if (element.type === "lesson") {
-          return (
-            <div key={index}>
-              {element.content.map((content, idx) => {
-                if (content.type === "text-block") {
-                  return <p key={idx}>{content.text}</p>;
-                } else if (content.type === "code-block") {
-                  return (
+  const handleBack = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+  };
+
+  const renderElement = (element, index) => {
+    if (element.type === "lesson") {
+      return (
+          <div key={index} className="card">
+            {element.content.map((content, idx) => {
+              if (content.type === "text-block") {
+                return <p key={idx}>{content.text}</p>;
+              } else if (content.type === "code-block") {
+                return (
                     <pre key={idx}>
-                      <code>{content.envCode}</code>
-                    </pre>
-                  );
-                }
-                return null;
-              })}
-            </div>
-          );
-        }
-        return null;
-      })}
-
-      {courseData.elements.map((element, index) => {
-        if (element.type === "question") {
-          return (
-            <div key={index}>
-              <p>{element.questionText}</p>
-              {element.answers.map((answer, ansIndex) => (
+                  <code>{content.envCode}</code>
+                </pre>
+                );
+              }
+              return null;
+            })}
+          </div>
+      );
+    } else if (element.type === "question") {
+      return (
+          <div key={index} className="card">
+            <p>{element.questionText}</p>
+            {element.answers.map((answer, ansIndex) => (
                 <div key={ansIndex}>
                   <input
-                    type={element.questionType === "true-false" ? "radio" : "checkbox"}
-                    name={`question-${index}`}
-                    checked={answers[index] === ansIndex}
-                    onChange={() => handleAnswerSelect(index, ansIndex)}
+                      type={element.questionType === "true-false" ? "radio" : "checkbox"}
+                      name={`question-${index}`}
+                      checked={answers[index] === ansIndex}
+                      onChange={() => handleAnswerSelect(index, ansIndex)}
                   />
                   <label>{answer.text}</label>
                 </div>
-              ))}
-            </div>
-          );
-        }
-        return null;
-      })}
+            ))}
+          </div>
+      );
+    }
+    return null;
+  };
 
-      <button onClick={calculateScore}>Submit Quiz</button>
-      {<p>Your score: {score} / {courseData.elements.filter(e => e.type === "question").length}</p>}
-    </div>
+  return (
+      <div>
+        <h1>{courseData.title}</h1>
+        <p>{courseData.description}</p>
+
+        {renderElement(courseData.elements[currentIndex], currentIndex)}
+
+        <div>
+          <button onClick={handleBack} disabled={currentIndex === 0}>
+            Back
+          </button>
+          <button onClick={handleNext} disabled={currentIndex === courseData.elements.length - 1}>
+            Continue
+          </button>
+        </div>
+
+        <button onClick={calculateScore}>Submit Quiz</button>
+        <p>Your score: {score} / {courseData.elements.filter(e => e.type === "question").length}</p>
+      </div>
   );
 }
 

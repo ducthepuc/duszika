@@ -1,0 +1,217 @@
+$primary-color: #6200ea;
+$secondary-color: #3700b3;
+$danger-color: #e53935;
+$background-color: #121212;
+$dark-gray: #2a2a2a;
+$medium-gray: #444;
+$light-gray: #e0e0e0;
+$box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+
+@mixin button-styles($bg-color, $hover-color, $active-color) {
+  background-color: $bg-color;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+  width: auto;
+
+  &:hover {
+    background-color: $hover-color;
+  }
+
+  &:active {
+    background-color: $active-color;
+  }
+}
+
+@mixin input-styles($border-color) {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  background-color: $dark-gray;
+  border: 1px solid $border-color;
+  color: $light-gray;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+  resize: none;
+  box-sizing: border-box;
+  
+  &:focus {
+    border-color: $primary-color;
+    outline: none;
+  }
+}
+
+@mixin card-styles($bg-color) {
+  border: 1px solid $medium-gray;
+  margin-bottom: 20px;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: $bg-color;
+  position: relative;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: $background-color;
+  color: $light-gray;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+}
+
+div.main-container {
+  max-width: 1000px;
+  width: 100%;
+  padding: 30px;
+  background-color: #1e1e1e;
+  border-radius: 10px;
+  box-shadow: $box-shadow;
+  margin-top: 50px;
+  box-sizing: border-box;
+}
+
+h2 {
+  text-align: center;
+  color: $light-gray;
+  margin-bottom: 20px;
+}
+
+.course-details {
+  margin-bottom: 30px;
+}
+
+input[type="text"],
+textarea {
+  @include input-styles($medium-gray);
+}
+
+textarea {
+  resize: none;
+}
+
+input[type="text"]:focus,
+textarea:focus {
+  border-color: $primary-color;
+}
+
+button {
+  @include button-styles($primary-color, $secondary-color, $primary-color);
+}
+
+button.save-course-btn {
+  background-color: $primary-color;
+  width: 100%;
+  font-size: 18px;
+  padding: 15px;
+  margin-top: 30px;
+  text-align: center;
+
+  &:hover {
+    background-color: $secondary-color;
+  }
+}
+
+// Step Section
+.step-section {
+  margin-bottom: 30px;
+}
+
+.step-container {
+  @include card-styles($dark-gray);
+}
+
+button.dropdown-toggle {
+  background-color: $medium-gray;
+  padding: 10px 15px;
+  font-size: 16px;
+  width: 100%;
+  text-align: left;
+  border-radius: 5px;
+  color: $light-gray;
+  margin-top: 15px;
+
+  &:hover {
+    background-color: #333;
+  }
+}
+
+div.dropdown-menu {
+  position: absolute;
+  background-color: #333;
+  color: #fff;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  width: 100%;
+  padding: 8px 0;
+  border-radius: 5px;
+  
+  div {
+    padding: 8px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $medium-gray;
+    }
+  }
+}
+
+button.add-answer,
+button.delete-answer {
+  background-color: $medium-gray;
+  padding: 5px 10px;
+  font-size: 14px;
+  border-radius: 5px;
+  margin-top: 10px;
+
+  &:hover {
+    background-color: #333;
+  }
+}
+
+button.delete-answer {
+  background-color: $danger-color;
+  color: white;
+  float: right;
+}
+
+button.delete-step {
+  background-color: $danger-color;
+  float: right;
+  margin-top: -20px;
+
+  &:hover {
+    background-color: darken($danger-color, 10%);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  div.main-container {
+    padding: 20px;
+  }
+
+  button {
+    width: 100%;
+  }
+
+  input[type="text"],
+  textarea {
+    font-size: 14px;
+  }
+
+  button.delete-step,
+  button.add-answer,
+  button.delete-answer {
+    width: 100%;
+    margin: 5px 0;
+  }
+}

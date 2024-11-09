@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import './login.scss'
 
 function Login() {
   // State hooks to manage form input and error messages
@@ -75,7 +76,7 @@ function Login() {
               {error && <p id="error-field">{error}</p>}
               <br />
               <button type="submit" id="login-button" disabled={loading}>
-                {loading ? 'Logging in...' : 'LOGIN ➢'}
+                {loading ? 'Logging in...' : 'LOGIN'}
               </button>
             </form>
             <button id="discord-auth-button">
