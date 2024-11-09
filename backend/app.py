@@ -8,7 +8,7 @@ from dbmanager import cursor
 
 # F.U.C. - Flare User Content
 
-ORIGIN = "http://localhost:5174"
+ORIGIN = "http://localhost:5173"
 
 app = f.Flask(__name__)
 CORS(app, resources={"/api/*": {"origins": [ORIGIN]}})

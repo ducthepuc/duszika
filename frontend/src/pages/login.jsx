@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import '../login-register.css';
 
 function Login() {
   // State hooks to manage form input and error messages
@@ -52,7 +51,7 @@ function Login() {
           <h1 id="title">Login</h1>
           <p>Don't have an account yet? <Link id="link" to="/register">Register!</Link></p> <br />
           <div id="login-fieldset">
-            <form onSubmit={handleLogin}> /* Prevent the default form submission */
+            <form onSubmit={handleLogin}>
               <label htmlFor="email">E-mail</label> <br />
               <input
                 type="email"
