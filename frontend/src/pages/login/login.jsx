@@ -1,90 +1,76 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './login.scss'
+import styles from './login.module.scss'; // Importing the scoped styles
 
 function Login() {
-  // State hooks to manage form input and error messages
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  
-  // useNavigate hook for redirecting after successful login
   const history = useNavigate();
 
-  // Handle form submission
   const handleLogin = async (e) => {
-    e.preventDefault();  // Prevent the default form submission behavior
-
+    e.preventDefault();
     setLoading(true);
-    setError('');  // Reset any previous errors
+    setError('');
 
     try {
-      // Send the POST request to the backend API
       const response = await axios.post('http://localhost:5000/api/uauth:def', {
-        email: email,
-        password: password,
+        email,
+        password,
       });
 
       if (response.data.result) {
-        // If login is successful, store the token and user data (optional)
-        localStorage.setItem('userToken', response.data.data.token);  // Save token in localStorage
-        // Redirect the user to another page (e.g., dashboard)
-        history.push('/dashboard');
+        localStorage.setItem('userToken', response.data.data.token);
+        history('/dashboard');
       } else {
-        // If login fails, show the error message from the response
         setError(response.data.reason);
       }
     } catch (err) {
-      // Handle unexpected errors (e.g., network issues)
-
       setError('Something went wrong, please try again.');
     } finally {
-      setLoading(false);  // Set loading to false when the request completes
+      setLoading(false);
     }
   };
 
   return (
-    <html>
-      <body>
-        <div id="fieldset-wrapper">
-          <h1 id="title">Login</h1>
-          <p>Don't have an account yet? <Link id="link" to="/register">Register!</Link></p> <br />
-          <div id="login-fieldset">
-            <form onSubmit={handleLogin}>
-              <label htmlFor="email">e-mail</label> <br />
-              <input
-                type="email"
-                id="email"
-                name="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}  /* Bind email input */
-                placeholder="/:"
-              /> <br />
-              <label htmlFor="password">password</label> <br />
-              <input
-                type="password"
-                id="password"
-                name="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}  /* Bind password input */
-                placeholder="/:"
-              /> <br />
-              {error && <p id="error-field">{error}</p>}
-              <br />
-              <button type="submit" id="login-button" disabled={loading}>
-                {loading ? 'Logging in...' : 'LOGIN'}
-              </button>
-            </form>
-            <button id="discord-auth-button">
-            </button>
-          </div>
-        </div>
-      </body>
-    </html>
+    <div className={styles.fieldsetWrapper}> {/* Use scoped className */}
+      <h1 className={styles.title}>Login</h1>
+      <p>Don't have an account yet? <br /><Link className={styles.link} to="/register">Register!</Link></p> <br />
+      <div className={styles.loginFieldset}>
+        <form onSubmit={handleLogin}>
+          <label htmlFor="email">e-mail</label> <br />
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="/:"
+          /> <br />
+          <label htmlFor="password">password</label> <br />
+          <input
+            type="password"
+            id="password"
+            name="password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="/:"
+          /> <br />
+          {error && <p className={styles.errorField}>{error}</p>} {/* Use scoped className */}
+          <br />
+          <button type="submit" className={styles.loginButton} disabled={loading}>
+            {loading ? 'Logging in...' : 'LOGIN'}
+          </button>
+        </form>
+        <button className={styles.discordAuthButton}>
+          Login with Discord
+        </button>
+      </div>
+    </div>
   );
 }
 

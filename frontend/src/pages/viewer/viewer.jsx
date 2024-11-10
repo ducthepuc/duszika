@@ -1,134 +1,41 @@
 import React, { useState } from 'react';
-import './viewer.scss'
+import Editor from '@monaco-editor/react';
+import styles from './Viewer.module.scss';  // Import styles as a module
+import ReactDOM from 'react-dom';
+import { Checkbox, Radio, Switch } from 'pretty-checkbox-react';
 
-//chatgpt course lanyok
+import '@djthoms/pretty-checkbox';
+
 const courseData = {
-  "title": "Advanced JavaScript Concepts",
-  "description": "Dive deep into JavaScript and master the core concepts, functions, and ES6+ features.",
-  "elements": [
+  title: "example",
+  description: "none",
+  elements: [
     {
-      "type": "lesson",
-      "content": [
+      type: "lesson",
+      content: [
         {
-          "type": "text-block",
-          "text": "In this lesson, we'll be exploring JavaScript functions. Functions are blocks of code designed to perform a particular task."
-        },
-        {
-          "type": "code-block",
-          "envCode": "const greet = (name) => { return `Hello, ${name}!`; }",
-          "resultChecker": "userid/jsresult1"
+          type: "text-block",
+          text: "lesson 1"
         }
       ]
     },
     {
-      "type": "lesson",
-      "content": [
+      type: "question",
+      questionType: "multiple-choice",
+      questionText: "question 1",
+      answers: [
         {
-          "type": "text-block",
-          "text": "Now that we know how to create functions, let's look at JavaScript closures. A closure is the combination of a function and the lexical environment within which that function was declared."
+          text: "answer 1",
+          correct: true
         },
         {
-          "type": "code-block",
-          "envCode": "function outer() { const name = 'closure'; return function inner() { console.log(name); }; }",
-          "resultChecker": "userid/jsresult2"
+          text: "answer 2",
+          correct: false
         }
-      ]
-    },
-    {
-      "type": "test",
-      "result": "userid/jsresult3"
-    },
-    {
-      "type": "question",
-      "questionType": "multiple-choice",
-      "questionText": "Which of the following is a JavaScript primitive data type?",
-      "answers": [
-        { "text": "String", "correct": true },
-        { "text": "Array", "correct": false },
-        { "text": "Object", "correct": false },
-        { "text": "Function", "correct": false }
-      ]
-    },
-    {
-      "type": "question",
-      "questionType": "multiple-choice",
-      "questionText": "What is the result of the following expression: '10' + 5?",
-      "answers": [
-        { "text": "'105'", "correct": true },
-        { "text": "'15'", "correct": false },
-        { "text": "'10 5'", "correct": false },
-        { "text": "NaN", "correct": false }
-      ]
-    },
-    {
-      "type": "question",
-      "questionType": "true-false",
-      "questionText": "JavaScript is a statically typed language.",
-      "answers": [
-        { "text": "True", "correct": false },
-        { "text": "False", "correct": true }
-      ]
-    },
-    {
-      "type": "question",
-      "questionType": "true-false",
-      "questionText": "In JavaScript, 'null' is equivalent to 'undefined'.",
-      "answers": [
-        { "text": "True", "correct": false },
-        { "text": "False", "correct": true }
-      ]
-    },
-    {
-      "type": "lesson",
-      "content": [
-        {
-          "type": "text-block",
-          "text": "Let's move on to JavaScript arrays. Arrays in JavaScript are list-like objects that are used to store multiple values in a single variable."
-        },
-        {
-          "type": "code-block",
-          "envCode": "let fruits = ['apple', 'banana', 'orange']; console.log(fruits[0]);",
-          "resultChecker": "userid/jsresult4"
-        }
-      ]
-    },
-    {
-      "type": "test",
-      "result": "userid/jsresult5"
-    },
-    {
-      "type": "question",
-      "questionType": "multiple-choice",
-      "questionText": "Which method is used to add a new element at the end of an array in JavaScript?",
-      "answers": [
-        { "text": "push()", "correct": true },
-        { "text": "pop()", "correct": false },
-        { "text": "shift()", "correct": false },
-        { "text": "unshift()", "correct": false }
-      ]
-    },
-    {
-      "type": "question",
-      "questionType": "multiple-choice",
-      "questionText": "Which of the following is true about JavaScript's 'this' keyword?",
-      "answers": [
-        { "text": "It always refers to the current function.", "correct": false },
-        { "text": "It refers to the global object in a method.", "correct": false },
-        { "text": "It refers to the object that is currently executing the code.", "correct": true },
-        { "text": "It refers to the last function that was invoked.", "correct": false }
-      ]
-    },
-    {
-      "type": "question",
-      "questionType": "true-false",
-      "questionText": "In JavaScript, the 'typeof' operator returns the data type of a value.",
-      "answers": [
-        { "text": "True", "correct": true },
-        { "text": "False", "correct": false }
       ]
     }
   ]
-}
+};
 
 function Viewer() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -171,64 +78,91 @@ function Viewer() {
     }
   };
 
+  const [editorHeight, setEditorHeight] = useState(300);
+
   const renderElement = (element, index) => {
     if (element.type === "lesson") {
       return (
-          <div key={index} className="card">
-            {element.content.map((content, idx) => {
-              if (content.type === "text-block") {
-                return <p key={idx}>{content.text}</p>;
-              } else if (content.type === "code-block") {
-                return (
-                    <pre key={idx}>
-                  <code>{content.envCode}</code>
-                </pre>
-                );
-              }
-              return null;
-            })}
-          </div>
+        <div key={index} className={styles.card}>
+          {element.content.map((content, idx) => {
+            if (content.type === "text-block") {
+              return <p key={idx}>{content.text}</p>;
+            } else if (content.type === "code-block") {
+              const whenMount = (e) => {
+                e.updateOptions({ contextmenu: false });
+                setEditorHeight(content.envCode.split("\n").length * 50);
+              };
+              return (
+                <Editor
+                  key={idx}
+                  defaultLanguage={content.envLang}
+                  value={content.envCode}
+                  width="95%"
+                  height={`${editorHeight}px`}
+                  onMount={whenMount}
+                  options={{
+                    cursorStyle: "line",
+                    readOnly: true,
+                    domReadOnly: true,
+                    minimap: { enabled: false },
+                    scrollBeyondLastLine: false,
+                    automaticLayout: true,
+                    contextmenu: false,
+                    formatOnType: true
+                  }}
+                  theme="vs-dark"
+                />
+              );
+            }
+            return null;
+          })}
+        </div>
       );
     } else if (element.type === "question") {
       return (
-          <div key={index} className="card">
-            <p>{element.questionText}</p>
-            {element.answers.map((answer, ansIndex) => (
-                <div key={ansIndex}>
-                  <input
-                      type={element.questionType === "true-false" ? "radio" : "checkbox"}
-                      name={`question-${index}`}
-                      checked={answers[index] === ansIndex}
-                      onChange={() => handleAnswerSelect(index, ansIndex)}
-                  />
-                  <label>{answer.text}</label>
-                </div>
-            ))}
-          </div>
+        <div key={index} className={styles.card}>
+          <p>{element.questionText}</p>
+          {element.answers.map((answer, ansIndex) => (
+            <div className={styles.checkboxWrapper} key={ansIndex}>
+              <input
+                id={`answer-${index}-${ansIndex}`}
+                className={styles.substituted}
+                type={element.questionType === "true-false" ? "radio" : "checkbox"}
+                name={`question-${index}`}
+                aria-hidden="true"
+                checked={answers[index] === ansIndex}
+                onChange={() => handleAnswerSelect(index, ansIndex)}
+              />
+              <label htmlFor={`answer-${index}-${ansIndex}`}>
+                {answer.text}
+              </label>
+            </div>
+          ))}
+        </div>
       );
     }
     return null;
   };
 
   return (
+    <div className={styles.viewerContainer}>
+      <h1>{courseData.title}</h1>
+      <p>{courseData.description}</p>
+
+      {renderElement(courseData.elements[currentIndex], currentIndex)}
+
       <div>
-        <h1>{courseData.title}</h1>
-        <p>{courseData.description}</p>
-
-        {renderElement(courseData.elements[currentIndex], currentIndex)}
-
-        <div>
-          <button onClick={handleBack} disabled={currentIndex === 0}>
-            Back
-          </button>
-          <button onClick={handleNext} disabled={currentIndex === courseData.elements.length - 1}>
-            Continue
-          </button>
-        </div>
-
-        <button onClick={calculateScore}>Submit Quiz</button>
-        <p>Your score: {score} / {courseData.elements.filter(e => e.type === "question").length}</p>
+        <button onClick={handleBack} disabled={currentIndex === 0}>
+          Back
+        </button>
+        <button onClick={handleNext} disabled={currentIndex === courseData.elements.length - 1}>
+          Continue
+        </button>
       </div>
+
+      <button onClick={calculateScore}>Submit Quiz</button>
+      <p>Your score: {score} / {courseData.elements.filter(e => e.type === "question").length}</p>
+    </div>
   );
 }
 

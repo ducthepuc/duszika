@@ -10,54 +10,84 @@ import { motion } from 'framer-motion';
 
 function AppContent() {
   const navigate = useNavigate();
+  
   const navigateToLogin = () => {
     navigate('/login');
   };
-    const navigateToCreator = () => {
-        navigate('/creator');
-    };
-    const navigateToCourse = () =>  {
-        navigate('/course')
-    }
 
+  const navigateToCreator = () => {
+    navigate('/creator');
+  };
+
+  const navigateToCourse = () => {
+    navigate('/course');
+  };
 
   return (
-      <div className="App">
-          <header><h1>FlareHUB is under construction</h1></header>
-          <motion.a whileHover={{scale: 1.1}}
-                    whileTap={{scale: 0.95}}
-                    href="https://github.com/ducthepuc/PyFlare" target="_blank" rel="noopener noreferrer">Read more here
-          </motion.a>
-          <motion.button whileHover={{scale: 1.1}}
-                         whileTap={{scale: 0.9}}
-                         onClick={navigateToLogin} id="panel-button">My panel
-          </motion.button>
-          <motion.button whileHover={{scale: 1.1}}
-                         whileTap={{scale: 0.9}}
-                         onClick={navigateToCreator} id="login-button">Create
-          </motion.button>
-          <motion.button whileHover={{scale: 1.1}}
-                         whileTap={{scale: 0.9}}
-                         onClick={navigateToCourse} id="login-button">Course
-          </motion.button>
-          <DataFetcher/>
+    <div className="App">
+      <header className="App__header">
+        <h1>FlareHUB is under construction</h1>
+      </header>
+
+      <div className="App__buttons">
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={navigateToLogin}
+          className="App__button App__button--panel"
+        >
+          My panel
+        </motion.button>
+        <br />
+
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={navigateToCreator}
+          className="App__button App__button--create"
+        >
+          Create
+        </motion.button>
+        <br />
+
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={navigateToCourse}
+          className="App__button App__button--course"
+        >
+          Course
+        </motion.button>
+        <br />
+
+        <motion.a
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          href="https://github.com/ducthepuc/PyFlare"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="App__link"
+        >
+          Read more here
+        </motion.a>
       </div>
+      
+      <DataFetcher />
+    </div>
   );
 }
 
 function App() {
-    return (
-        <>
-            <Router>
-                <Routes>
-                    <Route path="/" element={<AppContent/>}/>
-                    <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/creator" element={<Creator />} />
-            <Route path="/course" element={<CourseRenderer />} />
-          </Routes>
-        </Router>
-      </>
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<AppContent />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/creator" element={<Creator />} />
+        <Route path="/course" element={<CourseRenderer />} />
+      </Routes>
+    </Router>
   );
 }
 

@@ -1,0 +1,125 @@
+// Variables for color theme
+$background-dark: #1e1e2f;
+$background-light: #28293d;
+$text-light: #f0f0f5;
+$text-muted: #a3a3b3;
+$primary-color: #5c6bc0; // Light blueish accent color
+$error-color: #ff4c4c;
+$input-placeholder: #6c6c80;
+$border-radius: 15px;
+
+.viewerContainer {
+  font-family: 'Arial', sans-serif;
+  color: $text-light;
+  background-color: $background-dark; // Dark background for main container
+  padding: 20px;
+  border-radius: $border-radius;
+  min-height: 100vh; // Ensure it fills the full viewport height
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; // Center content vertically and horizontally
+
+  h1 {
+    font-size: 2rem;
+    color: $primary-color;
+    text-align: center;
+  }
+
+  p {
+    text-align: center;
+    font-size: 1.2rem;
+    color: $text-light;
+  }
+
+  button {
+    background-color: $primary-color;
+    color: $text-light;
+    border: none;
+    padding: 10px 15px;
+    font-size: 1rem;
+    margin-top: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: lighten($primary-color, 10%);
+    }
+
+    &:disabled {
+      background-color: darken($primary-color, 10%);
+      cursor: not-allowed;
+    }
+  }
+}
+
+.card {
+  background-color: $background-light;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 600px; // Constrain the card width on large screens
+}
+
+.checkboxWrapper {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.substituted {
+  margin-right: 10px;
+}
+
+// Mobile and tablet responsiveness
+@media (max-width: 768px) {
+  .viewerContainer {
+    padding: 10px; // Reduce padding on smaller screens
+  }
+
+  .card {
+    padding: 12px; // Reduce padding inside cards
+  }
+
+  h1 {
+    font-size: 1.8rem; // Smaller title font size
+  }
+
+  p {
+    font-size: 1rem; // Smaller description font size
+  }
+
+  button {
+    font-size: 0.9rem; // Smaller button text on smaller screens
+    padding: 8px 12px; // Adjust button padding
+  }
+}
+
+// Mobile phones (portrait mode)
+@media (max-width: 480px) {
+  .viewerContainer {
+    padding: 5px; // Even smaller padding
+  }
+
+  h1 {
+    font-size: 1.5rem; // Further reduce title font size
+  }
+
+  p {
+    font-size: 0.9rem; // Further reduce description font size
+  }
+
+  button {
+    font-size: 0.8rem; // Further reduce button font size
+    padding: 6px 10px; // Further adjust button padding
+  }
+
+  .card {
+    padding: 10px; // Reduce card padding
+    max-width: 100%; // Allow card to take full width on very small screens
+  }
+}
+
