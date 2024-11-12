@@ -4,6 +4,10 @@ from hashlib import sha256
 from mysql import connector
 import json, string, random
 
+from flask import Blueprint, request, jsonify
+
+auth_bp = Blueprint('auth', __name__)
+
 with open("../db_secrets.json", "r") as f:
     db_secrets = json.load(f)
 
@@ -89,7 +93,7 @@ def login_user_via_auth(email, password):
 
     return user
 
-
+@auth_bp.route('/api/get_user_by_token', methods=["POST"])
 def get_user(token):
     cursor.execute("SELECT * FROM user WHERE token = %s", (token))
     row = cursor.fetchone()

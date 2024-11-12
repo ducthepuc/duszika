@@ -23,7 +23,7 @@ function Login() {
 
       if (response.data.result) {
         localStorage.setItem('userToken', response.data.data.token);
-        history('/dashboard');
+        history('/homepage');
       } else {
         setError(response.data.reason);
       }
