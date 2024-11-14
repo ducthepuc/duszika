@@ -6,7 +6,11 @@ import json, string, random
 
 from flask import Blueprint, request, jsonify
 
+from flask_cors import CORS, cross_origin
+
 auth_bp = Blueprint('auth', __name__)
+
+CORS(app, supports_credentials=True)
 
 with open("../db_secrets.json", "r") as f:
     db_secrets = json.load(f)
@@ -94,10 +98,40 @@ def login_user_via_auth(email, password):
     return user
 
 @auth_bp.route('/api/get_user_by_token', methods=["POST"])
-def get_user(token):
-    cursor.execute("SELECT * FROM user WHERE token = %s", (token))
-    row = cursor.fetchone()
+@cross_origin(supports_credentials=True)
+def get_user():
+    try:
+        data = request.get_json()
+        print("Received data:", data)  # Debug print
 
-    return row
+        if not data:
+            print("No data received")
+            return jsonify({'error': 'No data received'}), 400
+
+        token = data.get('token')
+        print("Received token:", token)  # Debug print
+
+        if not token:
+            print("No token in data")
+            return jsonify({'error': 'No token provided'}), 400
+
+        cursor.execute("SELECT * FROM user WHERE token = %s", (token,))
+        row = cursor.fetchone()
+        print("Database result:", row)  # Debug print
+
+        if row:
+            response = {
+                'username': row[1],  # Adjust index based on your table structure
+                'id': row[0]
+            }
+            print("Sending response:", response)  # Debug print
+            return jsonify(response)
+        else:
+            print("No user found for token")
+            return jsonify({'error': 'User not found'}), 404
+
+    except Exception as e:
+        print("Error occurred:", str(e))  # Debug print
+        return jsonify({'error': str(e)}), 500
 
 # cursor.close()
