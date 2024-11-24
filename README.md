@@ -55,8 +55,9 @@ pip install -r requirements.txt
    - Scroll down and click "Go" to import the database
 
 ### 5. Running the Project
-1. Make sure XAMPP is running (both Apache and MySQL modules should be green)
-2. Double-click the `start.bat` file in the project folder
+1. Make sure to change the password (pw) in the db_secrets.json to your mysql database password or enable it if you didn't already.
+2. Make sure XAMPP is running (both Apache and MySQL modules should be green)
+3. Double-click the `start.bat` file in the project folder
    - If this doesn't work, try running it as administrator
 
 ### Common Issues & Solutions
