@@ -3,8 +3,11 @@ from hashlib import sha256
 
 from mysql import connector
 import json, string, random
+import sys
 
-with open("../db_secrets.json", "r") as f:
+filename = "../db_secrets.json" if len(sys.argv) == 1 else "db_secrets.json"
+
+with open(filename, "r") as f:
     db_secrets = json.load(f)
 
 sql = connector.connect(port=3306,
