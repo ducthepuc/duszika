@@ -88,15 +88,12 @@ const HomePage = () => {
             try {
                 console.log("Sending request with token...");
                 const response = await fetch('http://localhost:5000/api/get_user_by_token', {
-                    method: 'POST',
+                    method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json',
-                    },
-                    credentials: 'include',
-                    body: JSON.stringify({
-                        token: user_token
-                    })
+                        'Authorization': user_token
+                    }
                 });
 
                 console.log("Response status:", response.status); // Debug log

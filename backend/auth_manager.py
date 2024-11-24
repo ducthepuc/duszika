@@ -32,3 +32,31 @@ def user_registry():
         return jsonify({"result": True, "reason": "All info is right!"})
     except Exception as e:
         return jsonify({"result": False, "reason": str(e)})
+
+
+@auth_bp.route('/api/get_user_by_token', methods=["GET"])
+def get_user():
+    try:
+        data = request.headers
+
+        if not data:
+            return jsonify({'error': 'No data received'}), 400
+
+        token = data.get('Authorization')
+
+        if not token:
+            return jsonify({'error': 'No token provided'}), 400
+
+        user_data = dbm.get_user_by_token(token)
+
+        if user_data:
+            response = {
+                'username': user_data[1],
+                'id': user_data[0]
+            }
+            return jsonify(response)
+        else:
+            return jsonify({'error': 'User not found'}), 404
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
