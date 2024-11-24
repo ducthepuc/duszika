@@ -3,22 +3,25 @@
 Welcome to Flare! This platform lets you learn about IT topics - from programming languages to computer science and AI. What makes Flare special? The content is built by both our team AND the community. You can take courses created by the Flare team or other users, and even create and share your own courses!
 
 ## Important Note ⚠️
-Flare is currently in active development. Some features are still being worked on or might not be available yet. This doesn't reflect the final state of the project.
+> Flare is currently in active development. Some features are still being worked on or might not be available yet. This doesn't reflect the final state of the project.
 
-`The current 0.0.1 Pre-release only features a few things` such as:
-   - Account register and login - v1
-   - Course render preview - alpha
-   - Course creator - preview
-   - Homepage - placeholder preview
+### `The current 0.0.1 Pre-release only features a few things` such as:
+   - **Account register and login** - *v1*
+   - **Course render preview** - *alpha*
+   - **Course creator** - *preview*
+   - **Homepage** - *placeholder preview*
 
-Plans for Beta 1 release:
-   - Account system - v2 with profile picture, bio, content access limitation based on account type
-   - Course renderer - v1 with rendering from JSON files of the selected course, progress tracking
-   - Course creator - v1 with better interface, more task/step types, tags
-   - Homepage - v1 with actual course cards being rendered, and filtered through by the search using the course's tags and title
-   - Hosted website that is accessible for everyone(desktop only)
+### Plans for Beta 1 release:
+   - **Account system** - *v2 with profile picture, bio, content access limitation based on account type*
+   - **Course renderer** - *v1 with rendering from JSON files of the selected course, progress tracking*
+   - **Course creator** - *v1 with better interface, more task/step types, tags*
+   - **Homepage** - *v1 with actual course cards being rendered, and filtered through by the search using the course's tags and title*
+   - **Hosted website that is accessible for everyone** *(desktop only)*
 
-## Prerequisites
+
+## 📌 If you'd like to deploy the current version of Flare on your `Windows system`, refer to the following guide below:
+
+### Prerequisites
 Before you start, make sure you have these installed on your computer:
 1. [NodeJS](https://nodejs.org/en) - Download and install the LTS (Long Term Support) version
 2. [XAMPP](https://www.apachefriends.org/download.html) - For running the database
