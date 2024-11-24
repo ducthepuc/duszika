@@ -1,34 +1,82 @@
+# Flare - Learn about all kinds of IT-related topics
 
-# Flare - Learn about all kinds of IT releated topics
+Welcome to Flare! This platform lets you learn about IT topics - from programming languages to computer science and AI. What makes Flare special? The content is built by both our team AND the community. You can take courses created by the Flare team or other users, and even create and share your own courses!
 
-An intuitive platform that allows users to learn about all kinds of IT topics(from programming languges, topics regarding computer science, all the way to AI). All of this is built for you, by YOU! Flare allows its users to complete courses built by the Flare team or by other users. Flare allows its users to create and share there courses with the world.
+## Important Note ⚠️
+Flare is currently in active development. Some features are still being worked on or might not be available yet. This doesn't reflect the final state of the project.
 
+## Prerequisites
+Before you start, make sure you have these installed on your computer:
+1. [NodeJS](https://nodejs.org/en) - Download and install the LTS (Long Term Support) version
+2. [XAMPP](https://www.apachefriends.org/download.html) - For running the database
+3. A code editor (We recommend [Visual Studio Code](https://code.visualstudio.com/) or [PyCharm](https://www.jetbrains.com/pycharm/))
+4. [Python](https://www.python.org/downloads/) - Make sure to check "Add to PATH" during installation
 
+## Step-by-Step Installation Guide
 
-## Note
+### 1. Get the Project Files
+1. Go to our [release page](https://github.com/ducthepuc/Flare/releases)
+2. Download the newest release
+3. Unzip/Extract the downloaded file
+4. Open the extracted folder with your code editor
 
-Flare is still very much in-development. Some important features are still being worked on and doesn't reflect the final state at all or are just completely, or the feature is completely none existent currently.
-
-If you still want to run the project on your device, then you can run it locally. The steps are below:
-## Run locally
-
-To deploy this project downlaod the newest release from our [release page.](https://github.com/ducthepuc/Flare/releases)
-After that create a virtual environment:
-
+### 2. Set Up the Frontend (React/Vite)
+Open a terminal in your code editor and run:
 ```bash
-  python -m venv /path/to/new/virtual/environment
-```
-Then install all the requirements:
-```bash
-  .\venv\Scripts\python.exe -m pip install -r requirements.txt
-```
-After everything is installed, you need XAMPP to start the databse on your computer(if you don't have XAMPP installed, download it [here](https://www.apachefriends.org/download.html))
-After the installation you need to start the Apache module and the MySQL mdoule inside of the XAMPP control panel. 
+# This installs Vite, which we use to run the React frontend
+npm install -D vite
 
-Press the admin button on the MySQL module. At the Admin page you need to import the dbschema.sql. After all of that is done, you should be able to run and test out Flare.
+# Install other project dependencies
+npm install
+```
+
+### 3. Set Up the Python Environment
+In the same terminal:
+```bash
+# Create a virtual environment (replace path with where you want it)
+# On Windows:
+python -m venv venv
+
+# Activate the virtual environment
+# On Windows:
+.\venv\Scripts\activate
+
+# Install Python dependencies
+pip install -r requirements.txt
+```
+
+### 4. Set Up the Database
+1. Open XAMPP Control Panel
+2. Start both the "Apache" and "MySQL" modules (click the "Start" buttons)
+3. Click the "Admin" button next to MySQL (this opens phpMyAdmin in your browser)
+4. In phpMyAdmin:
+   - Click "Import" in the top menu
+   - Click "Choose File" and select the `dbschema.sql` from the project folder
+   - Scroll down and click "Go" to import the database
+
+### 5. Running the Project
+1. Make sure XAMPP is running (both Apache and MySQL modules should be green)
+2. Double-click the `start.bat` file in the project folder
+   - If this doesn't work, try running it as administrator
+
+### Common Issues & Solutions
+- **"npm not found"**: Make sure NodeJS is properly installed and your computer was restarted after installation
+- **"python not found"**: Ensure Python is added to your system's PATH
+- **Database connection error**: Verify that XAMPP's MySQL module is running
+- **Port already in use**: Make sure no other applications are using ports 3000 (React) or 5000 (Backend)
+
+## Contributing
+We welcome contributions! Feel free to submit issues and pull requests.
+
 ## Authors
+- [@ducthepuc](https://github.com/ducthepuc) - Frontend Development
+- [@ebotdabest](https://github.com/ebotdabest) - Backend Development
+- [@PotatoDonkey749](https://github.com/PotatoDonkey749) - Full-Stack Development
+- [@Drifter0071](https://github.com/Drifter0071) - UI/UX Design
 
-- [@ducthepuc](https://github.com/ducthepuc) - Frontend
-- [@ebotdabest](https://github.com/ebotdabest) - Backend
-- [@PotatoDonkey749](https://github.com/PotatoDonkey749) - Frontend and Backend
-- [@Drifter0071](https://github.com/Drifter0071) - Design
+## Need Help?
+If you run into any issues not covered here, please:
+1. Check our [Issues](https://github.com/ducthepuc/Flare/issues) page
+2. Create a new issue if your problem isn't already reported
+
+Happy learning with Flare! 🚀
