@@ -5,7 +5,7 @@ Welcome to Flare! This platform lets you learn about IT topics - from programmin
 ## Important Note ⚠️
 Flare is currently in active development. Some features are still being worked on or might not be available yet. This doesn't reflect the final state of the project.
 
-The current 0.0.1 Pre-release only features a few things such as:
+`The current 0.0.1 Pre-release only features a few things` such as:
    - Account register and login - v1
    - Course render preview - alpha
    - Course creator - preview
