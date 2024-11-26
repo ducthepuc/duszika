@@ -6,6 +6,7 @@ import RegisterPage from './src/pages/register/register.jsx';
 import Creator from './src/pages/creator/creator.jsx';
 import CourseRenderer from "./src/pages/viewer/viewer.jsx";
 import HomePage from './src/pages/homepage/homepage.jsx'
+import UserPanel from './src/pages/panel/panel.jsx'
 import './app.scss'
 import { motion } from 'framer-motion';
 
@@ -51,6 +52,11 @@ function App() {
             <Route path="/homepage" element={
               <ProtectedRoute>
                 <HomePage />
+              </ProtectedRoute>
+            } />
+            <Route path="/panel" element={
+              <ProtectedRoute>
+                <UserPanel />
               </ProtectedRoute>
             } />
           </Routes>

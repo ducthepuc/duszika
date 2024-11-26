@@ -2,18 +2,64 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { motion } from 'framer-motion';
 import HeaderImage from '../assets/HomepageHeader.png';
+import DefaultPfp from '../assets/default_pfp.jpg'
 
-const Card = ({ children, className = "" }) => (
-    <div className={`bg-white rounded-lg shadow-lg overflow-hidden ${className}`}>
-        {children}
-    </div>
-);
+const Card = ({ children }) => {
+    return (
+        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+            {children}
+        </div>
+    );
+};
 
-const Badge = ({ children, className = "" }) => (
-    <span className={`inline-block px-2 py-1 text-sm rounded-full bg-gray-200 text-gray-700 ${className}`}>
-        {children}
-    </span>
-);
+const Badge = ({ children }) => {
+    return (
+        <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+            {children}
+        </span>
+    );
+};
+
+export const fetchUsername = async (navigate, setUsername, setIsLoading) => {
+    const user_token = localStorage.getItem("userToken");
+    console.log("Token from localStorage:", user_token); // Debug log
+
+    if (!user_token) {
+        navigate('/login');
+        return;
+    }
+
+    try {
+        console.log("Sending request with token...");
+        const response = await fetch('http://localhost:5000/api/get_user_by_token', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': user_token
+            }
+        });
+
+        console.log("Response status:", response.status); // Debug log
+
+        const responseData = await response.text();
+        console.log("Raw response:", responseData); // Debug log
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch user details: ${responseData}`);
+        }
+
+        const userData = JSON.parse(responseData);
+        console.log("Parsed user data:", userData); // Debug log
+
+        setUsername(userData.username);
+        setIsLoading(false);
+    } catch (error) {
+        console.error("Detailed error:", error); // More detailed error logging
+        localStorage.removeItem("userToken");
+        navigate('/login');
+    }
+};
 
 const HomePage = () => {
     const navigate = useNavigate();
@@ -22,29 +68,10 @@ const HomePage = () => {
     const [username, setUsername] = useState('');
     const [isLoading, setIsLoading] = useState(true);
 
-
     const sampleCards = [
-        {
-            id: 1,
-            title: "Introduction to React",
-            description: "Learn the basics of React development",
-            tags: ["react", "javascript", "frontend"],
-            image: "/api/placeholder/300/200"
-        },
-        {
-            id: 2,
-            title: "Advanced CSS Techniques",
-            description: "Master modern CSS and animations",
-            tags: ["css", "web", "design"],
-            image: "/api/placeholder/300/200"
-        },
-        {
-            id: 3,
-            title: "Node.js Fundamentals",
-            description: "Server-side JavaScript development",
-            tags: ["nodejs", "backend", "javascript"],
-            image: "/api/placeholder/300/200"
-        }
+        { id: 1, title: "Introduction to React", description: "Learn the basics of React development", tags: ["react", "javascript", "frontend"], image: "/api/placeholder/300/200" },
+        { id: 2, title: "Advanced CSS Techniques", description: "Master modern CSS and animations", tags: ["css", "web", "design"], image: "/api/placeholder/300/200" },
+        { id: 3, title: "Node.js Fundamentals", description: "Server-side JavaScript development", tags: ["nodejs", "backend", "javascript"], image: "/api/placeholder/300/200" }
     ];
 
     useEffect(() => {
@@ -56,68 +83,15 @@ const HomePage = () => {
         setSearchInput(searchTerm);
 
         const filtered = sampleCards.filter(card => {
-            const searchString = [
-                card.title,
-                card.description,
-                ...card.tags
-            ].join(' ').toLowerCase();
-
+            const searchString = [card.title, card.description, ...card.tags].join(' ').toLowerCase();
             return searchString.includes(searchTerm);
         });
 
         setFilteredCards(filtered);
     };
 
-    const user_token = localStorage.getItem("userToken");
-
-    const logout = () => {
-            localStorage.removeItem("userToken");
-        alert("You've been logged out!");
-    };
-
     useEffect(() => {
-        const fetchUsername = async () => {
-            const user_token = localStorage.getItem("userToken");
-            console.log("Token from localStorage:", user_token); // Debug log
-
-            if (!user_token) {
-                navigate('/login');
-                return;
-            }
-
-            try {
-                console.log("Sending request with token...");
-                const response = await fetch('http://localhost:5000/api/get_user_by_token', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'Authorization': user_token
-                    }
-                });
-
-                console.log("Response status:", response.status); // Debug log
-
-                const responseData = await response.text();
-                console.log("Raw response:", responseData); // Debug log
-
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch user details: ${responseData}`);
-                }
-
-                const userData = JSON.parse(responseData);
-                console.log("Parsed user data:", userData); // Debug log
-
-                setUsername(userData.username);
-                setIsLoading(false);
-            } catch (error) {
-                console.error("Detailed error:", error); // More detailed error logging
-                localStorage.removeItem("userToken");
-                navigate('/login');
-            }
-        };
-
-        fetchUsername();
+        fetchUsername(navigate, setUsername, setIsLoading);
     }, [navigate]);
 
     return (
@@ -126,6 +100,7 @@ const HomePage = () => {
                 <h3 className="">
                     Welcome, {username || 'Guest'}
                 </h3>
+                <img src={DefaultPfp} alt={'pfp'} onClick={() => navigate('/panel')}/>
                 <button
                     onClick={() => {
                         logout();
