@@ -48,10 +48,11 @@ def get_user():
             return jsonify({'error': 'No token provided'}), 400
 
         user_data = dbm.get_user_by_token(token)
+        profile_data = dbm.get_profile(user_data[2])
 
         if user_data:
             response = {
-                'username': user_data[1],
+                'username': profile_data[1],
                 'id': user_data[0]
             }
             return jsonify(response)

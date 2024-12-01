@@ -66,9 +66,9 @@ pip install -r requirements.txt
 2. Start both the "Apache" and "MySQL" modules (click the "Start" buttons)
 3. Click the "Admin" button next to MySQL (this opens phpMyAdmin in your browser)
 4. In phpMyAdmin:
-   - Click "Import" in the top menu
-   - Click "Choose File" and select the `dbschema.sql` from the project folder
-   - Scroll down and click "Go" to import the database
+   - Create a db titled `flare`
+      - Click "Import" in the top menu
+      - Click "Choose File" and select the `dbschema.sql` from the project folder
 
 ### 5. Running the Project
 1. Make sure to change the password (pw) in the db_secrets.json to your mysql database password or enable it if you didn't already.
