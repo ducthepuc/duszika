@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import styles from './register.module.scss';  // Import styles as a module
+import styles from '../login/account.module.scss';
+import { motion } from 'framer-motion';
 
 function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -31,23 +32,60 @@ function RegisterPage() {
   };
 
   return (
-    <div className={styles.fieldsetWrapper}>
-      <h1 className={styles.title}>Register</h1>
-      <p>Already have an account? <br /><Link className={styles.link} to="/login">Login!</Link></p> <br />
-      <div className={styles.registerFieldset}>
+    <>
+      <h1 className={styles.title}>Register to Flare</h1>
+      <p>Already have an account? <br/><Link className={styles.link} to="/login">Login!</Link></p> <br/>
+      <div className={styles.mainFieldset}>
         <form onSubmit={handleSubmit}>
-          <label htmlFor="username">username</label> <br />
-          <input type="text" id="username" defaultValue={formData.name}
-                 onChange={handleChange} name="username" required placeholder="/:" /> <br />
-          <label htmlFor="email">e-mail</label> <br />
-          <input type="email" id="email" value={formData.email} onChange={handleChange} name="email" required placeholder="/:" /> <br />
-          <label htmlFor="password">password</label> <br />
-          <input type="password" id="password" value={formData.password} onChange={handleChange} name="password" required placeholder="/:" /> <br />
-          <input type="password" id="confirm_password" value={formData.confirm_password} onChange={handleChange} name="confirm_password" required placeholder="repeat /:" /> <br />
-          <button type="submit" className={styles.registerButton}>CREATE➢</button>
+          <label htmlFor="username">username</label> <br/>
+          <motion.input className={styles.username}
+                        whileHover={{scale: 1.02}}
+                        whileTap={{scale: 0.9}}
+                        type="text"
+                        id="username"
+                        defaultValue={formData.name}
+                        onChange={handleChange}
+                        name="username"
+                        required placeholder="/:"/>
+          <br/>
+          <label htmlFor="email">e-mail</label> <br/>
+          <motion.input type="email"
+                        whileHover={{scale: 1.02}}
+                        whileTap={{scale: 0.9}}
+                        id="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        name="email"
+                        required placeholder="/:"/>
+          <br/>
+          <label htmlFor="password">password</label> <br/>
+          <motion.input type="password"
+                        whileHover={{scale: 1.02}}
+                        whileTap={{scale: 0.9}}
+                        id="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        name="password"
+                        required placeholder="/:"/>
+          <br/>
+          <motion.input type="password"
+                        whileHover={{scale: 1.02}}
+                        whileTap={{scale: 0.9}}
+                        id="confirm_password"
+                        value={formData.confirm_password}
+                        onChange={handleChange}
+                        name="confirm_password"
+                        required placeholder="repeat /:"/>
+          <br/>
+          <br/>
+          <motion.button type="submit" type="password"
+                         whileHover={{scale: 1.02}}
+                         whileTap={{scale: 0.9}}
+                         className={styles.mainButton}>CREATE➢
+          </motion.button>
         </form>
       </div>
-    </div>
+    </>
   );
 }
 

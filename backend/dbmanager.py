@@ -12,8 +12,7 @@ with open(filename, "r") as f:
 
 sql = connector.connect(port=3306,
                         database=db_secrets['name'],
-                        user=db_secrets['un'],
-                        password=db_secrets['pw'])
+                        user=db_secrets['un'])
 
 cursor = sql.cursor(buffered=True)
 
