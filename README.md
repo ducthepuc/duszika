@@ -2,7 +2,7 @@
 
 Welcome to Flare! This platform lets you learn about IT topics - from programming languages to computer science and AI. What makes Flare special? The content is built by both our team AND the community. You can take courses created by the Flare team or other users, and even create and share your own courses!
 
-## Important Note ⚠️
+## Important Note ⚠️🥵🥵🥵
 > Flare is currently in active development. Some features are still being worked on or might not be available yet. This doesn't reflect the final state of the project.
 
 ### `The current 0.0.1 Pre-release only features a few things` such as:
