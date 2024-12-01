@@ -86,10 +86,10 @@ pip install -r requirements.txt
 We welcome contributions! Feel free to submit issues and pull requests.
 
 ## Authors
-- [@ducthepuc](https://github.com/ducthepuc) - Frontend Development
-- [@ebotdabest](https://github.com/ebotdabest) - Backend Development
-- [@PotatoDonkey749](https://github.com/PotatoDonkey749) - Full-Stack Development
-- [@Drifter0071](https://github.com/Drifter0071) - UI/UX Design
+- [@ducthepuc](https://github.com/ducthepuc) - Frontend Development 😱
+- [@ebotdabest](https://github.com/ebotdabest) - Backend Development 😝
+- [@PotatoDonkey749](https://github.com/PotatoDonkey749) - Full-Stack Development 😍
+- [@Drifter0071](https://github.com/Drifter0071) - UI/UX Design 🙄
 
 ## Need Help?
 If you run into any issues not covered here, please:
