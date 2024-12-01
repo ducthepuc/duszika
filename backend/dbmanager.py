@@ -38,7 +38,7 @@ class DCData:
         ...
 
 
-def add_user(name, password, pw2, user_email, is_discord, discord_data: DCData):
+def add_user(name: str, password, pw2, user_email, is_discord, discord_data: DCData):
     if password != pw2:
         raise ValueError("Passwords do not match")
 
@@ -60,7 +60,7 @@ def add_user(name, password, pw2, user_email, is_discord, discord_data: DCData):
     cursor.execute(
         "INSERT INTO user (isDiscord, profile_id, registration_id, token, username, joined, isAccountValid) VALUES "
         "(%s,%s,%s,%s,%s,%s,%s)", params=(is_discord, profile_id, registration_id, token,
-                                          name, datetime.now(), True))
+                                          name.lower(), datetime.now(), True))
 
     sql.commit()
 
@@ -96,6 +96,21 @@ def login_user_via_auth(email, password):
 def get_user_by_token(token):
     cursor.execute("SELECT * FROM user WHERE token = %s", (token,))
     row = cursor.fetchone()
-    return row[0], row[5]
+    return row[0], row[5], row[2]
+
+
+def get_profile(profile_id):
+    cursor.execute("select * from profile where id=%s", (profile_id,))
+    return cursor.fetchone()
+
+
+def change_display_name(token, new_name):
+    usr = get_user_by_token(token)
+
+    cursor.execute("update profile set username = %s where id = %s", (new_name, usr[2],))
+    sql.commit()
+
+def change_bio(token, new_bio):
+    ...
 
 # cursor.close()

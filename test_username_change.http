@@ -1,0 +1,8 @@
+### PUT request to configure endpoint
+PUT http://localhost:5000/api/v1/configure
+Authorization: hqKqMsU787wkvP4sQd1NE4iaJkS7ZW
+Content-Type: application/json
+
+{
+  "username": "testsigma"
+}

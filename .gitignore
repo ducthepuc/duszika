@@ -6,5 +6,4 @@ venv_xoxo
 prisma
 db_secrets.json
 reset.sql
-test_account.http
 .idea
