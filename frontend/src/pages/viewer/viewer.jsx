@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Editor from '@monaco-editor/react';
-import styles from './Viewer.module.scss';  // Import styles as a module
+import styles from './viewer.module.scss';  // Import styles as a module
 import ReactDOM from 'react-dom';
 import { Checkbox, Radio, Switch } from 'pretty-checkbox-react';
 

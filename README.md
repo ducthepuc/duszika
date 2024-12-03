@@ -82,6 +82,66 @@ pip install -r requirements.txt
 - **Database connection error**: Verify that XAMPP's MySQL module is running
 - **Port already in use**: Make sure no other applications are using ports 3000 (React) or 5000 (Backend)
 
+## 📌 If you'd like to deploy the current version of Flare on your `Linux system`, follow this guide:
+
+### Prerequisites
+Before starting, ensure you have the following installed:
+1. [NodeJS](https://nodejs.org/en) - Install the LTS version
+2. [MariaDB](https://mariadb.org/) or MySQL - For database management
+3. A code editor (We recommend [Visual Studio Code](https://code.visualstudio.com/))
+4. [Python](https://www.python.org/downloads/) - Install via your package manager and ensure it's added to your PATH
+
+### Step-by-Step Installation Guide
+
+#### 1. Get the Project Files
+1. Visit our [release page](https://github.com/ducthepuc/Flare/releases)
+2. Download the latest release
+3. Extract the downloaded archive
+4. Open the extracted folder with your preferred code editor
+
+#### 2. Set Up the Frontend (React/Vite)
+In a terminal opened in the project directory, run:
+```bash
+# Install Vite and project dependencies
+npm install -D vite
+npm install
+```
+#### 3.Set Up a Python Environment
+```bash
+# Create and activate a virtual environment
+python3 -m venv venv
+source venv/bin/activate
+
+# Install Python dependencies
+pip install -r requirements.txt
+```
+#### 4. Set Up the Database
+Start the database service:
+```bash
+sudo systemctl start mariadb
+```
+Secure your MariaDB/MySQL installation:
+```bash
+sudo mysql_secure_installation
+```
+Log in to the database:
+```bash
+mysql -u root -p
+```
+Create the database and import the schema:
+```bash
+CREATE DATABASE flare;
+USE flare;
+SOURCE /path/to/dbschema.sql;
+```
+#### 5. Running the project
+1. Update db_secrets.json with your database credentials.
+2. Start the frontend and backend:
+```bash
+npm run dev
+python3 app.py
+```
+3. Open your browser and navigate to the appropriate localhost port.
 ## Contributing
 We welcome contributions! Feel free to submit issues and pull requests.
 
