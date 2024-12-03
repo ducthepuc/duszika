@@ -20,7 +20,7 @@ const Badge = ({ children }) => {
     );
 };
 
-export const fetchUsername = async (navigate, setUsername, setIsLoading) => {
+export const fetchUsername = async (navigate, setUsername, setIsLoading, setPfp) => {
     const user_token = localStorage.getItem("userToken");
     console.log("Token from localStorage:", user_token); // Debug log
 
@@ -40,6 +40,8 @@ export const fetchUsername = async (navigate, setUsername, setIsLoading) => {
             }
         });
 
+        console.log(response)
+
         console.log("Response status:", response.status); // Debug log
 
         const responseData = await response.text();
@@ -53,6 +55,7 @@ export const fetchUsername = async (navigate, setUsername, setIsLoading) => {
         console.log("Parsed user data:", userData); // Debug log
 
         setUsername(userData.username);
+        setPfp(`http://localhost:5000/cdn/pfp/${userData.id}`)
         setIsLoading(false);
     } catch (error) {
         console.error("Detailed error:", error); // More detailed error logging
@@ -66,6 +69,7 @@ const HomePage = () => {
     const [searchInput, setSearchInput] = useState('');
     const [filteredCards, setFilteredCards] = useState([]);
     const [username, setUsername] = useState('');
+    const [pfp, setPfp] = useState('')
     const [isLoading, setIsLoading] = useState(true);
 
     const sampleCards = [
@@ -91,7 +95,7 @@ const HomePage = () => {
     };
 
     useEffect(() => {
-        fetchUsername(navigate, setUsername, setIsLoading);
+        fetchUsername(navigate, setUsername, setIsLoading, setPfp);
     }, [navigate]);
 
     return (
@@ -100,7 +104,7 @@ const HomePage = () => {
                 <h3 className="">
                     Welcome, {username || 'Guest'}
                 </h3>
-                <img src={DefaultPfp} alt={'pfp'} onClick={() => navigate('/panel')}/>
+                <img src={pfp} alt={'pfp'} width={200} height={200} onClick={() => navigate('/panel')}/>
                 <button
                     onClick={() => {
                         logout();
