@@ -12,7 +12,8 @@ with open(filename, "r") as f:
 
 sql = connector.connect(port=3306,
                         database=db_secrets['name'],
-                        user=db_secrets['un'])
+                        user=db_secrets['un'],
+                        password=db_secrets['pw'])
 
 cursor = sql.cursor(buffered=True)
 
@@ -108,6 +109,7 @@ def change_display_name(token, new_name):
 
     cursor.execute("update profile set username = %s where id = %s", (new_name, usr[2],))
     sql.commit()
+
 
 def change_bio(token, new_bio):
     ...
