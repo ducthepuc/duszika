@@ -62,11 +62,11 @@ const UserPanel = () => {
         if (!file) return;
 
         const formData = new FormData();
-        formData.append('profilePicture', file);
+        formData.append('pfp', file);  // Changed from 'profilePicture' to 'pfp'
 
         try {
             const user_token = localStorage.getItem("userToken");
-            const response = await fetch('http://localhost:5000/api/upload_profile_picture', {
+            const response = await fetch('http://localhost:5000/api/v1/upload_pfp', {  // Fixed URL
                 method: 'POST',
                 headers: {
                     'Authorization': user_token
@@ -79,6 +79,7 @@ const UserPanel = () => {
             }
 
             const result = await response.json();
+            // You might want to modify this based on your actual backend response
             setProfilePicture(result.profilePictureUrl || DefaultPfp);
             setIsEditing(prev => ({ ...prev, profilePicture: false }));
         } catch (error) {

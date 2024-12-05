@@ -25,7 +25,7 @@ def get_pfp(uid):
         return send_from_directory('../cdn', 'images/error.png')
 
 
-@user_bp.route('/api/v1/upload_pfp', methods=['POST'])
+@user_bp.route('/api/v1/upload_pfp', methods=['POST', 'OPTIONS'])
 def upload_pfp():
     auth = request.headers.get('Authorization')
     if auth is None:
