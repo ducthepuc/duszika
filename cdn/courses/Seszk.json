@@ -1,0 +1,25 @@
+{
+  "title": "Seszk",
+  "description": "Szeretem a tejet, csak apa már régen ment el érte.",
+  "elements": [
+    {
+      "type": "question",
+      "questionType": "multiple-choice",
+      "questionText": "Bőrszín?",
+      "answers": [
+        {
+          "text": "Fehér",
+          "correct": true
+        },
+        {
+          "text": "Fekete",
+          "correct": false
+        },
+        {
+          "text": "Sárga",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

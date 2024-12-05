@@ -1,0 +1,25 @@
+{
+  "title": "Seszk2",
+  "description": "Kys",
+  "elements": [
+    {
+      "type": "question",
+      "questionType": "multiple-choice",
+      "questionText": "Bőrszín?",
+      "answers": [
+        {
+          "text": "Fehér",
+          "correct": true
+        },
+        {
+          "text": "Fekete",
+          "correct": false
+        },
+        {
+          "text": "Sárga",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

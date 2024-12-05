@@ -7,6 +7,7 @@ import Creator from './src/pages/creator/creator.jsx';
 import CourseRenderer from "./src/pages/viewer/viewer.jsx";
 import HomePage from './src/pages/homepage/homepage.jsx'
 import UserPanel from './src/pages/panel/panel.jsx'
+import UploadCourse from './src/pages/uploader/uploader.jsx'
 import './app.scss'
 import { motion } from 'framer-motion';
 
@@ -59,6 +60,7 @@ function App() {
                 <UserPanel />
               </ProtectedRoute>
             } />
+            <Route path="/uploader" element={<UploadCourse />} />
           </Routes>
         </Router>
       </>
