@@ -112,6 +112,9 @@ def change_display_name(token, new_name):
 
 
 def change_bio(token, new_bio):
-    ...
+    usr = get_user_by_token(token)
+
+    cursor.execute("update profile set username = %s where id = %s", (new_bio, usr[2],))
+    sql.commit()
 
 # cursor.close()

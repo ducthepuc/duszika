@@ -7,6 +7,9 @@ import DefaultPfp from '../assets/default_pfp.jpg';
 
 let courses = [];
 
+// STOP FUCKING WITH THE BACKEND IDC IF IT'S "OPTIMIZING" ILL GET TO IT IK ITS JUST GPT CODE ANYWAYS
+// - Your bff, Henrik
+
 const MOCK_USERS = [
     { id: 1, username: 'johndoe', name: 'John Doe' },
     { id: 2, username: 'janedoe', name: 'Jane Doe' }
