@@ -39,13 +39,26 @@ const UserPanel = () => {
                 }
 
                 const userData = await response.json();
-                setUsername(userData.username);
-                setBio(userData.bio || '');
+                console.log(userData)
+                if (userData.result) {
+                    const response2 = await fetch(`http://localhost:5000/api/users/${userData.id}`)
+                    if (!response2.ok) {
+                        throw new Error('Failed to fetch user details');
+                    }
 
-                // Set profile picture. If user hasn't uploaded a profile picture, use DefaultPfp
-                setProfilePicture(userData.profilePicture || DefaultPfp);
+                    const profileData = await response2.json()
 
-                setIsLoading(false);
+                    setUsername(profileData.name);
+                    setBio(profileData.bio || '');
+
+                    setProfilePicture(`http://localhost:5000/cdn/pfp/${userData.id}`)
+
+                    setIsLoading(false);
+                }else {
+                    // Add code when user is failed to be loaded
+                }
+
+
             } catch (error) {
                 console.error("Error fetching user data:", error);
                 localStorage.removeItem("userToken");
@@ -79,9 +92,17 @@ const UserPanel = () => {
             }
 
             const result = await response.json();
-            // You might want to modify this based on your actual backend response
-            setProfilePicture(result.profilePictureUrl || DefaultPfp);
-            setIsEditing(prev => ({ ...prev, profilePicture: false }));
+            console.log(result)
+
+            if (result.result) {
+                setProfilePicture(`http://localhost:5000/cdn/pfp/${response.uid}`);
+                setIsEditing(prev => ({ ...prev, profilePicture: true }));
+            } else {
+                // Add stuff when it failed.
+                setIsEditing(prev => ({ ...prev, profilePicture: false }));
+            }
+
+
         } catch (error) {
             console.error("Error uploading profile picture:", error);
             alert('Failed to upload profile picture');
@@ -92,13 +113,13 @@ const UserPanel = () => {
     const handleBioUpdate = async () => {
         try {
             const user_token = localStorage.getItem("userToken");
-            const response = await fetch('http://localhost:5000/api/update_bio', {
-                method: 'POST',
+            const response = await fetch('http://localhost:5000/api/v1/configure', {
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': user_token
                 },
-                body: JSON.stringify({ bio })
+                body: JSON.stringify({ 'bio': bio })
             });
 
             if (!response.ok) {
@@ -124,6 +145,9 @@ const UserPanel = () => {
                         className="profile-picture"
                         src={profilePicture}
                         alt="Profile"
+
+                        width={200}
+                        height={200}
                     />
                     {isEditing.profilePicture ? (
                         <input

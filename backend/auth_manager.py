@@ -40,24 +40,25 @@ def get_user():
         data = request.headers
 
         if not data:
-            return jsonify({'error': 'No data received'}), 400
+            return jsonify({'result': False, 'reason': 'No data received'}), 400
 
         token = data.get('Authorization')
 
         if not token:
-            return jsonify({'error': 'No token provided'}), 400
+            return jsonify({'result': False, 'reason': 'No token provided'}), 400
 
         user_data = dbm.get_user_by_token(token)
         profile_data = dbm.get_profile(user_data[2])
 
         if user_data:
             response = {
+                'result': True,
                 'username': profile_data[1],
                 'id': user_data[0]
             }
             return jsonify(response)
         else:
-            return jsonify({'error': 'User not found'}), 404
+            return jsonify({'result': False, 'reason': 'User not found'}), 404
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500

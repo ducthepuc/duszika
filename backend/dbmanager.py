@@ -66,7 +66,8 @@ def add_user(name: str, password, pw2, user_email, is_discord, discord_data: DCD
 
 
 def get_user(id):
-    cursor.execute("SELECT * FROM user WHERE id = %s", (id))
+    """Gets the user with the given id."""
+    cursor.execute("SELECT * FROM user WHERE id = %s", (id,))
     row = cursor.fetchone()
 
     return row
@@ -77,6 +78,7 @@ def change_password(id, password):
 
 
 def login_user_via_auth(email, password):
+    """Registers a user via basic authentication."""
     password = sha256(password.encode('utf-8')).hexdigest()
 
     cursor.execute("SELECT * FROM classical_registration WHERE email = %s AND password = %s",
@@ -94,13 +96,16 @@ def login_user_via_auth(email, password):
 
 
 def get_user_by_token(token):
+    """Gets the basic user data, and the profile id"""
     cursor.execute("SELECT * FROM user WHERE token = %s", (token,))
     row = cursor.fetchone()
     return row[0], row[5], row[2]
 
 
 def get_profile(profile_id):
-    cursor.execute("select * from profile where id=%s", (profile_id,))
+    """Retrieves the basic profile data via profile id"""
+
+    cursor.execute("select * from profile where id=%s", [profile_id, ])
     return cursor.fetchone()
 
 
@@ -113,8 +118,11 @@ def change_display_name(token, new_name):
 
 def change_bio(token, new_bio):
     usr = get_user_by_token(token)
+    print(usr)
 
-    cursor.execute("update profile set username = %s where id = %s", (new_bio, usr[2],))
+    cursor.execute("update profile set description = %s where id = %s", (new_bio, usr[2],))
     sql.commit()
 
 # cursor.close()
+
+sql.commit()

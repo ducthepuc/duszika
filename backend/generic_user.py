@@ -59,7 +59,8 @@ def upload_pfp():
 
     return {
         "result": True,
-        "reason": "Picture uploaded"
+        "reason": "Picture uploaded",
+        "uid": uid
     }
 
 
@@ -67,11 +68,39 @@ def upload_pfp():
 def change_user():
     auth = request.headers.get("Authorization")
     changes = request.json
+    print(changes)
 
     for change, value in changes.items():
+        print(change, value)
         if change == "username":
             dbm.change_display_name(auth, value)
         elif change == "bio":
             dbm.change_bio(auth, value)
 
     return {"response": True}
+
+
+@user_bp.route('/api/users/<path:uid>', methods=["GET"])
+def get_profile(uid):
+    usr = dbm.get_user(uid)
+    message = {
+        "result": False,
+        "reason": "User not found"
+    }
+    if usr is None:
+        return message
+
+    profile = dbm.get_profile(usr[2])
+    if profile is None:
+        message["reason"] = "Invalid profile id"
+        return message
+
+    message["result"] = True
+    message["data"] = {
+        "name": profile[1],
+        "bio": profile[2],
+        "streak": profile[3]
+    }
+
+    return message
+
