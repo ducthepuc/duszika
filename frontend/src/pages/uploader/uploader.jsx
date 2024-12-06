@@ -1,0 +1,82 @@
+import React, { useState } from 'react';
+import styles from './uploader.module.scss'
+
+const SingleFileUploader = () => {
+    const [file, setFile] = useState(null);
+    const [status, setStatus] = useState('initial');
+
+    const handleFileChange = (e) => {
+        if (e.target.files) {
+            setStatus('initial');
+            setFile(e.target.files[0]);
+        }
+    };
+
+    const handleUpload = async () => {
+        if (file) {
+            setStatus('uploading');
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                /* bibibibibi Henrik. We killed fuc nigger */
+                const result = await fetch('http://localhost:5000/api/v1/upload_course', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                const data = await result.json();
+
+                console.log(data);
+                setStatus('success');
+            } catch (error) {
+                console.error(error);
+                setStatus('fail');
+            }
+        }
+    };
+
+    return (
+        <>
+            <div className={styles.inputGroup}>
+                <input id={styles.file} type="file" onChange={handleFileChange} />
+            </div>
+            {file && (
+                <section>
+                    File details:
+                    <ul>
+                        <li>Name: {file.name}</li>
+                        <li>Type: {file.type}</li>
+                        <li>Size: {Math.round(file.size / 1024)} Kilobytes</li>
+                    </ul>
+                </section>
+            )}
+
+            {file && (
+                <button
+                    onClick={handleUpload}
+                    className={styles.submit}
+                >
+                    Upload a file
+                </button>
+            )}
+
+            <Result status={status} />
+        </>
+    );
+};
+
+const Result = ({ status }) => {
+    if (status === 'success') {
+        return <p>✅ File uploaded successfully!</p>;
+    } else if (status === 'fail') {
+        return <p>❌ File upload failed!</p>;
+    } else if (status === 'uploading') {
+        return <p>⏳ Uploading selected file...</p>;
+    } else {
+        return null;
+    }
+};
+
+export default SingleFileUploader;
