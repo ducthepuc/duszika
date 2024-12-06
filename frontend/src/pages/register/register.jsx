@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import styles from '../login/account.module.scss';
 import { motion } from 'framer-motion';
 
 function RegisterPage() {
@@ -33,55 +32,105 @@ function RegisterPage() {
 
   return (
     <>
-      <h1 className={styles.title}>Register to Flare</h1>
-      <p>Already have an account? <br/><Link className={styles.link} to="/login">Login!</Link></p> <br/>
-      <div className={styles.mainFieldset}>
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="username">username</label> <br/>
-          <motion.input className={styles.username}
-                        whileHover={{scale: 1.02}}
-                        whileTap={{scale: 0.9}}
-                        type="text"
-                        id="username"
-                        defaultValue={formData.name}
-                        onChange={handleChange}
-                        name="username"
-                        required placeholder="/:"/>
+      <h1 style={{ textAlign: 'center', fontSize: '2rem', margin: '20px 0' }}>Register to Flare</h1>
+      <p style={{ textAlign: 'center', marginBottom: '20px' }}>
+        Already have an account? <br/>
+        <Link style={{ color: '#007bff', textDecoration: 'none' }} to="/login">Login!</Link>
+      </p>
+      <div style={{ maxWidth: '500px', margin: '0 auto', padding: '20px', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+          <label htmlFor="username" style={{ fontWeight: 'bold' }}>Username</label>
+          <motion.input
+            style={{
+              padding: '10px',
+              borderRadius: '4px',
+              border: '1px solid #ccc',
+              fontSize: '1rem',
+            }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.9 }}
+            type="text"
+            id="username"
+            value={formData.name}
+            onChange={handleChange}
+            name="name"
+            required
+            placeholder="/:"
+          />
           <br/>
-          <label htmlFor="email">e-mail</label> <br/>
-          <motion.input type="email"
-                        whileHover={{scale: 1.02}}
-                        whileTap={{scale: 0.9}}
-                        id="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        name="email"
-                        required placeholder="/:"/>
+          <label htmlFor="email" style={{ fontWeight: 'bold' }}>E-mail</label>
+          <motion.input
+            style={{
+              padding: '10px',
+              borderRadius: '4px',
+              border: '1px solid #ccc',
+              fontSize: '1rem',
+            }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.9 }}
+            type="email"
+            id="email"
+            value={formData.email}
+            onChange={handleChange}
+            name="email"
+            required
+            placeholder="/:"
+          />
           <br/>
-          <label htmlFor="password">password</label> <br/>
-          <motion.input type="password"
-                        whileHover={{scale: 1.02}}
-                        whileTap={{scale: 0.9}}
-                        id="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        name="password"
-                        required placeholder="/:"/>
+          <label htmlFor="password" style={{ fontWeight: 'bold' }}>Password</label>
+          <motion.input
+            style={{
+              padding: '10px',
+              borderRadius: '4px',
+              border: '1px solid #ccc',
+              fontSize: '1rem',
+            }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.9 }}
+            type="password"
+            id="password"
+            value={formData.password}
+            onChange={handleChange}
+            name="password"
+            required
+            placeholder="/:"
+          />
           <br/>
-          <motion.input type="password"
-                        whileHover={{scale: 1.02}}
-                        whileTap={{scale: 0.9}}
-                        id="confirm_password"
-                        value={formData.confirm_password}
-                        onChange={handleChange}
-                        name="confirm_password"
-                        required placeholder="repeat /:"/>
+          <motion.input
+            style={{
+              padding: '10px',
+              borderRadius: '4px',
+              border: '1px solid #ccc',
+              fontSize: '1rem',
+            }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.9 }}
+            type="password"
+            id="confirm_password"
+            value={formData.confirm_password}
+            onChange={handleChange}
+            name="confirm_password"
+            required
+            placeholder="Repeat /:"
+          />
           <br/>
-          <br/>
-          <motion.button type="submit"
-                         whileHover={{scale: 1.02}}
-                         whileTap={{scale: 0.9}}
-                         className={styles.mainButton}>CREATE➢
+          <motion.button
+            type="submit"
+            style={{
+              padding: '12px 20px',
+              borderRadius: '4px',
+              backgroundColor: '#007bff',
+              color: 'white',
+              fontSize: '1rem',
+              border: 'none',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease-in-out',
+              alignSelf: 'center',
+            }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            CREATE ➢
           </motion.button>
         </form>
       </div>

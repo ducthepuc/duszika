@@ -1,29 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { motion } from 'framer-motion';
-import HeaderImage from '../assets/HomepageHeader.png';
 import DefaultPfp from '../assets/default_pfp.jpg';
-import styles from './homepage.module.scss';
+import { Input } from 'reactstrap';
 
-const Card = ({ children }) => {
+const Card = ({ children, onClick }) => {
     return (
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+        <motion.div 
+            style={{ backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', cursor: 'pointer' }}
+            whileHover={{ scale: 1.05 }} 
+            whileTap={{ scale: 0.95 }}
+            onClick={onClick}
+        >
             {children}
-        </div>
-    );
-};
-
-const Badge = ({ children }) => {
-    return (
-        <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-            {children}
-        </span>
+        </motion.div>
     );
 };
 
 export const fetchUsername = async (navigate, setUsername, setIsLoading) => {
     const user_token = localStorage.getItem("userToken");
-    console.log("Token from localStorage:", user_token); // Debug log
 
     if (!user_token) {
         navigate('/login');
@@ -31,7 +26,6 @@ export const fetchUsername = async (navigate, setUsername, setIsLoading) => {
     }
 
     try {
-        console.log("Sending request with token...");
         const response = await fetch('http://localhost:5000/api/get_user_by_token', {
             method: 'GET',
             headers: {
@@ -41,22 +35,17 @@ export const fetchUsername = async (navigate, setUsername, setIsLoading) => {
             }
         });
 
-        console.log("Response status:", response.status); // Debug log
-
         const responseData = await response.text();
-        console.log("Raw response:", responseData); // Debug log
 
         if (!response.ok) {
             throw new Error(`Failed to fetch user details: ${responseData}`);
         }
 
         const userData = JSON.parse(responseData);
-        console.log("Parsed user data:", userData); // Debug log
-
         setUsername(userData.username);
         setIsLoading(false);
     } catch (error) {
-        console.error("Detailed error:", error); // More detailed error logging
+        console.error("Error:", error);
         localStorage.removeItem("userToken");
         navigate('/login');
     }
@@ -68,116 +57,112 @@ const HomePage = () => {
     const [filteredCards, setFilteredCards] = useState([]);
     const [username, setUsername] = useState('');
     const [isLoading, setIsLoading] = useState(true);
+    const [courses, setCourses] = useState([]);
 
-    const sampleCards = [
-        { id: 1, title: "Introduction to React", description: "Learn the basics of React development", tags: ["react", "javascript", "frontend"], image: "/api/placeholder/300/200" },
-        { id: 2, title: "Advanced CSS Techniques", description: "Master modern CSS and animations", tags: ["css", "web", "design"], image: "/api/placeholder/300/200" },
-        { id: 3, title: "Node.js Fundamentals", description: "Server-side JavaScript development", tags: ["nodejs", "backend", "javascript"], image: "/api/placeholder/300/200" }
-    ];
+    const logout = () => {
+        localStorage.removeItem("userToken");
+        setUsername('');
+        setIsLoading(true);
+        navigate('/login');
+    };
+
+    const getCourseNames = async () => {
+        try {
+            const response = await fetch('/api/get_course_names');
+            if (response.ok) {
+                const data = await response.json();
+                const courseNames = data.course_names;
+                const courses = courseNames.map((courseName, index) => ({
+                    id: index + 1,
+                    title: courseName
+                }));
+                setCourses(courses);
+            } else {
+                console.error('Failed to fetch course names:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error fetching course names:', error);
+        }
+    };
 
     useEffect(() => {
-        setFilteredCards(sampleCards);
+        getCourseNames();
     }, []);
 
-    const handleSearch = (e) => {
-        const searchTerm = e.target.value.toLowerCase();
-        setSearchInput(searchTerm);
-
-        const filtered = sampleCards.filter(card => {
-            const searchString = [card.title, card.description, ...card.tags].join(' ').toLowerCase();
-            return searchString.includes(searchTerm);
-        });
-
+    useEffect(() => {
+        const filtered = courses.filter((card) => 
+            card.title.toLowerCase().includes(searchInput.toLowerCase())
+        );
         setFilteredCards(filtered);
-    };
+    }, [searchInput, courses]);
 
     useEffect(() => {
         fetchUsername(navigate, setUsername, setIsLoading);
     }, [navigate]);
 
+    const handleSearch = (e) => {
+        setSearchInput(e.target.value);
+    };
+
+    const handleCourseClick = (courseTitle) => {
+        navigate(`/viewer/${courseTitle}`);
+    };
+
     return (
-        <div className="">
-            <div className="">
-                <h3 className="">
-                    Welcome, {username || 'Guest'}
-                </h3>
-                <img src={DefaultPfp} alt={'pfp'} onClick={() => navigate('/panel')}/>
-                <button
-                    onClick={() => {
-                        logout();
-                        navigate('/login');
-                    }}
-                    className=""
-                >
-                    Logout
-                </button>
-            </div>
+        <div style={{ padding: '20px' }}>
+            {/* Header Section */}
+            <header style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <div>
+                    <h3>Welcome, {username || 'Guest'}</h3>
+                    <div>
+                        <img 
+                            src={DefaultPfp} 
+                            alt="Profile" 
+                            style={{ width: '40px', height: '40px', borderRadius: '50%', cursor: 'pointer' }}
+                            onClick={() => navigate('/panel')}
+                        />
+                        <br />
+                        <button 
+                            onClick={logout} 
+                            style={{ marginLeft: '10px', padding: '5px 10px', cursor: 'pointer' }}
+                        >
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            </header>
 
-            <div className="mb-8">
-                <img
-                    src={HeaderImage}
-                    alt="Header"
-                    className=""
-                />
-            </div>
-
-            <div className="relative mb-8">
-                <input
-                    type="text"
-                    placeholder="Search courses, tags, or descriptions..."
-                    value={searchInput}
+            {/* Centered Search Bar */}
+            <div style={{ margin: '20px 0' }}>
+                <input 
+                    type="text" 
+                    placeholder="Search courses..." 
+                    value={searchInput} 
                     onChange={handleSearch}
-                    className=""
+                    style={{ padding: '10px', width: '100%', maxWidth: '400px', margin: '0 auto', display: 'block' }}
                 />
             </div>
 
-            <div className="flex gap-4 mb-8">
+            {/* Action Button */}
+            <div style={{ margin: '20px 0' }}>
                 <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => navigate('/creator')}
-                    className=""
+                    style={{ padding: '10px 20px', cursor: 'pointer' }}
                 >
-                    Create
-                </motion.button>
-                <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => navigate('/course')}
-                    className=""
-                >
-                    Course
+                    Create Course
                 </motion.button>
             </div>
 
-            {/* Cards Grid */}
-            <div className="">
+            {/* Course Cards */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '20px' }}>
                 {filteredCards.map((card) => (
-                    <motion.div
-                        key={card.id}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                    >
-                        <Card>
-                            <img
-                                src={card.image}
-                                alt={card.title}
-                                className=""
-                            />
-                            <div className="p-4">
-                                <h4 className="">{card.title}</h4>
-                                <p className="">{card.description}</p>
-                                <div className="">
-                                    {card.tags.map((tag, index) => (
-                                        <Badge key={index}>
-                                            {tag}
-                                        </Badge>
-                                    ))}
-                                </div>
-                            </div>
-                        </Card>
-                    </motion.div>
+                    <Card key={card.id} onClick={() => handleCourseClick(card.title)}>
+                        <div style={{ padding: '10px' }}>
+                            <h4 style={{ color: 'black' }}>{card.title}</h4>
+                        </div>
+                    </Card>
                 ))}
             </div>
         </div>

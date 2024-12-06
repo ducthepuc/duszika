@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import './creator.scss';
+import { Navigate, useNavigate } from "react-router-dom";
 
 function CourseCreator() {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [steps, setSteps] = useState([]);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const navigate = useNavigate();
 
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
@@ -59,7 +60,7 @@ function CourseCreator() {
         setSteps(newSteps);
     };
 
-    const saveCourse = () => {
+    const saveCourse = async () => {
         const courseData = {
             title,
             description,
@@ -86,18 +87,32 @@ function CourseCreator() {
             }),
         };
 
-        const courseJson = JSON.stringify(courseData, null, 2);
-        const blob = new Blob([courseJson], { type: 'application/json' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = `${title || 'course'}.json`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        try {
+            const response = await fetch('/api/file_upload', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(courseData),
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                console.log('Course saved successfully:', result);
+                alert('Course saved successfully!');
+            } else {
+                const error = await response.json();
+                console.error('Failed to save course:', error);
+                alert(`Failed to save course: ${error.error || 'Unknown error'}`);
+            }
+        } catch (error) {
+            console.error('Error occurred:', error);
+            alert('An error occurred while saving the course.');
+        }
     };
 
     return (
-        <div>
+        <div style={{ padding: '20px' }}>
             <h2>Create a New Course</h2>
 
             <input
@@ -105,16 +120,30 @@ function CourseCreator() {
                 placeholder="Course Title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
+                style={{
+                    width: '100%',
+                    padding: '10px',
+                    marginBottom: '15px',
+                    border: '1px solid #ccc',
+                    borderRadius: '4px',
+                }}
             />
             <textarea
                 placeholder="Course Description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
+                style={{
+                    width: '100%',
+                    padding: '10px',
+                    marginBottom: '15px',
+                    border: '1px solid #ccc',
+                    borderRadius: '4px',
+                }}
             />
 
             {steps.map((step, stepIndex) => (
                 <div key={stepIndex} style={{ border: '1px solid #ddd', margin: '10px', padding: '10px' }}>
-                    <button onClick={() => removeStep(stepIndex)} style={{ float: 'right', color: 'red' }}>Delete Step</button>
+                    <button onClick={() => removeStep(stepIndex)} style={{ float: 'right', color: 'red', background: 'none', border: 'none', cursor: 'pointer' }}>Delete Step</button>
 
                     {step.type === 'lesson' && (
                         <div>
@@ -128,6 +157,13 @@ function CourseCreator() {
                                             const newSteps = [...steps];
                                             newSteps[stepIndex].content[contentIndex].text = e.target.value;
                                             setSteps(newSteps);
+                                        }}
+                                        style={{
+                                            width: '100%',
+                                            padding: '10px',
+                                            marginBottom: '15px',
+                                            border: '1px solid #ccc',
+                                            borderRadius: '4px',
                                         }}
                                     />
                                 </div>
@@ -143,31 +179,70 @@ function CourseCreator() {
                                 placeholder="Question Text"
                                 value={step.questionText}
                                 onChange={(e) => handleStepChange(stepIndex, 'questionText', e.target.value)}
+                                style={{
+                                    width: '100%',
+                                    padding: '10px',
+                                    marginBottom: '15px',
+                                    border: '1px solid #ccc',
+                                    borderRadius: '4px',
+                                }}
                             />
                             {step.answers.map((answer, answerIndex) => (
-                                <div key={answerIndex} style={{ display: 'flex', alignItems: 'center' }}>
+                                <div key={answerIndex} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
                                     <input
                                         type="text"
                                         placeholder={`Answer ${answerIndex + 1}`}
                                         value={answer.text}
                                         onChange={(e) => handleAnswerChange(stepIndex, answerIndex, e.target.value)}
+                                        style={{
+                                            width: '70%',
+                                            padding: '10px',
+                                            marginRight: '10px',
+                                            border: '1px solid #ccc',
+                                            borderRadius: '4px',
+                                        }}
                                     />
                                     <input
                                         type={step.questionType === 'true-false' ? 'radio' : 'checkbox'}
                                         checked={answer.correct}
                                         onChange={() => toggleCorrectAnswer(stepIndex, answerIndex)}
                                     />
-                                    <button onClick={() => removeAnswerOption(stepIndex, answerIndex)} style={{ color: 'red', marginLeft: '5px' }}>X</button>
+                                    <button onClick={() => removeAnswerOption(stepIndex, answerIndex)} style={{ color: 'red', marginLeft: '5px', background: 'none', border: 'none', cursor: 'pointer' }}>X</button>
                                 </div>
                             ))}
-                            <button onClick={() => addAnswerOption(stepIndex)}>Add Answer Option</button>
+                            <button
+                                onClick={() => addAnswerOption(stepIndex)}
+                                style={{
+                                    padding: '8px 12px',
+                                    backgroundColor: '#007bff',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer',
+                                    marginBottom: '10px',
+                                }}
+                            >
+                                Add Answer Option
+                            </button>
                         </div>
                     )}
                 </div>
             ))}
 
             <div style={{ position: 'relative', display: 'inline-block' }}>
-                <button onClick={toggleDropdown}>Add Step</button>
+                <button
+                    onClick={toggleDropdown}
+                    style={{
+                        padding: '10px 20px',
+                        backgroundColor: '#28a745',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '4px',
+                        cursor: 'pointer',
+                    }}
+                >
+                    Add Step
+                </button>
                 {isDropdownOpen && (
                     <div style={{
                         position: 'absolute',
@@ -179,13 +254,51 @@ function CourseCreator() {
                         padding: '8px 0',
                         borderRadius: '4px',
                     }}>
-                        <div onClick={() => addStep('lesson')} style={{ padding: '8px', cursor: 'pointer' }}>Lesson</div>
-                        <div onClick={() => addStep('question')} style={{ padding: '8px', cursor: 'pointer' }}>Question</div>
+                        <div
+                            onClick={() => addStep('lesson')}
+                            style={{ padding: '8px', cursor: 'pointer', textAlign: 'center' }}
+                        >
+                            Lesson
+                        </div>
+                        <div
+                            onClick={() => addStep('question')}
+                            style={{ padding: '8px', cursor: 'pointer', textAlign: 'center' }}
+                        >
+                            Question
+                        </div>
                     </div>
                 )}
             </div>
 
-            <button onClick={saveCourse}>Save Course</button>
+            <button
+                onClick={saveCourse}
+                style={{
+                    padding: '10px 20px',
+                    backgroundColor: '#007bff',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    marginTop: '20px',
+                }}
+            >
+                Save Course
+            </button>
+
+            <button
+                onClick={() => navigate('/homepage')}
+                style={{
+                    padding: '10px 20px',
+                    backgroundColor: '#FF0000',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    marginTop: '20px',
+                }}
+            >
+                Back to homepage
+            </button>
         </div>
     );
 }

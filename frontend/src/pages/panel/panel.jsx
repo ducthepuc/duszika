@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import DefaultPfp from '../assets/default_pfp.jpg';
-import styles from './panel.module.scss'
+
 const UserPanel = () => {
     const navigate = useNavigate();
 
@@ -106,84 +106,118 @@ const UserPanel = () => {
 
             setIsEditing(prev => ({ ...prev, bio: false }));
         } catch (error) {
-            console.error("Error updating bio:", error);
-            alert('Failed to update bio');
+            return;
         }
     };
 
     if (isLoading) {
-        return <div className="loading-container">Loading...</div>;
+        return <div style={{ textAlign: 'center', padding: '20px' }}>Loading...</div>;
     }
 
     return (
-        <>
-            <div className={styles.UserPanelContainer}>
-                <div className={styles.PictureSection}>
-                    <img
-                        className={styles.ProfilePicture}
-                        src={profilePicture}
-                        alt="Profile"
+        <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+                <img
+                    style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover' }}
+                    src={profilePicture}
+                    alt="Profile"
+                />
+                {isEditing.profilePicture ? (
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleProfilePictureUpload}
+                        style={{ marginTop: '10px' }}
                     />
-                    {isEditing.profilePicture ? (
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleProfilePictureUpload}
-                            className={styles.PictureUpload}
-                        />
+                ) : (
+                    <button
+                        onClick={() => setIsEditing(prev => ({ ...prev, profilePicture: true }))}
+                        style={{
+                            marginTop: '10px',
+                            padding: '8px 16px',
+                            backgroundColor: '#007bff',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '4px',
+                            cursor: 'pointer'
+                        }}
+                    >
+                        Change Profile Picture
+                    </button>
+                )}
+            </div>
+
+            <div style={{ width: '100%', textAlign: 'center' }}>
+                <h2 style={{ marginBottom: '10px' }}>Welcome, {username}!</h2>
+
+                <div style={{ marginBottom: '20px' }}>
+                    {isEditing.bio ? (
+                        <>
+                            <textarea
+                                style={{
+                                    width: '100%',
+                                    padding: '10px',
+                                    marginBottom: '15px',
+                                    borderRadius: '4px',
+                                    border: '1px solid #ccc',
+                                    minHeight: '100px'
+                                }}
+                                value={bio}
+                                onChange={(e) => setBio(e.target.value)}
+                                placeholder="Enter your bio"
+                            />
+                            <div>
+                                <button
+                                    onClick={handleBioUpdate}
+                                    style={{
+                                        padding: '8px 16px',
+                                        backgroundColor: '#28a745',
+                                        color: 'white',
+                                        border: 'none',
+                                        borderRadius: '4px',
+                                        cursor: 'pointer',
+                                        marginRight: '10px'
+                                    }}
+                                >
+                                    Save Bio
+                                </button>
+                                <button
+                                    onClick={() => setIsEditing(prev => ({ ...prev, bio: false }))}
+                                    style={{
+                                        padding: '8px 16px',
+                                        backgroundColor: '#dc3545',
+                                        color: 'white',
+                                        border: 'none',
+                                        borderRadius: '4px',
+                                        cursor: 'pointer'
+                                    }}
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </>
                     ) : (
-                        <button
-                            className={styles.UploadPicture}
-                            onClick={() => setIsEditing(prev => ({ ...prev, profilePicture: true }))}
-                        >
-                            Change Profile Picture
-                        </button>
+                        <>
+                            <p style={{ marginBottom: '10px', fontStyle: 'italic' }}>{bio || 'No bio set'}</p>
+                            <button
+                                onClick={() => setIsEditing(prev => ({ ...prev, bio: true }))}
+                                style={{
+                                    padding: '8px 16px',
+                                    backgroundColor: '#007bff',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                Edit Bio
+                            </button>
+                        </>
                     )}
                 </div>
-
-                <div className={styles.UserInfo}>
-                    <h2 className={styles.Username}>Welcome, {username}!</h2>
-
-                    <div className={styles.Bio}>
-                        {isEditing.bio ? (
-                            <>
-                                <textarea
-                                    className={styles.BioTextarea}
-                                    value={bio}
-                                    onChange={(e) => setBio(e.target.value)}
-                                    placeholder="Enter your bio"
-                                />
-                                <div className={styles.BioButtons}>
-                                    <button
-                                        className={styles.BioSave}
-                                        onClick={handleBioUpdate}
-                                    >
-                                        Save Bio
-                                    </button>
-                                    <button
-                                        className={styles.BioCancel}
-                                        onClick={() => setIsEditing(prev => ({ ...prev, bio: false }))}
-                                    >
-                                        Cancel
-                                    </button>
-                                </div>
-                            </>
-                        ) : (
-                            <>
-                                <p className={styles.BioText}>{bio || 'No bio set'}</p>
-                                <button
-                                    className={styles.EditBio}
-                                    onClick={() => setIsEditing(prev => ({ ...prev, bio: true }))}
-                                >
-                                    Edit Bio
-                                </button>
-                            </>
-                        )}
-                    </div>
-                </div>
             </div>
-        </>
-        );
+        </div>
+    );
 };
 
 export default UserPanel;
