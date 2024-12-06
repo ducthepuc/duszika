@@ -12,12 +12,6 @@ $primary-dark: #cc5f19;
 $primary-light: #ffa366;
 $border-radius: 15px;
 
-@mixin flex-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 * {
   box-sizing: border-box;
   margin: 0;
@@ -28,11 +22,12 @@ body {
   background-color: $background-dark;
   color: $text-light;
   font-family: 'Inter', sans-serif;
-  @include flex-center;
 }
 
 .inputGroup {
-  @include flex-center;
+  display: flex;
+  align-content: center;
+  justify-content: center;
   margin: 2rem 0;
 
   #file {
