@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import DefaultPfp from '../assets/default_pfp.jpg';
-
+import styles from './panel.module.scss'
 const UserPanel = () => {
     const navigate = useNavigate();
 
@@ -116,11 +116,11 @@ const UserPanel = () => {
     }
 
     return (
-        <div className="user-panel-container">
-            <div className="profile-header">
-                <div className="profile-picture-section">
+        <>
+            <div className={styles.UserPanelContainer}>
+                <div className={styles.PictureSection}>
                     <img
-                        className="profile-picture"
+                        className={styles.ProfilePicture}
                         src={profilePicture}
                         alt="Profile"
                     />
@@ -129,11 +129,11 @@ const UserPanel = () => {
                             type="file"
                             accept="image/*"
                             onChange={handleProfilePictureUpload}
-                            className="profile-picture-upload"
+                            className={styles.PictureUpload}
                         />
                     ) : (
                         <button
-                            className="edit-profile-picture-btn"
+                            className={styles.UploadPicture}
                             onClick={() => setIsEditing(prev => ({ ...prev, profilePicture: true }))}
                         >
                             Change Profile Picture
@@ -141,27 +141,27 @@ const UserPanel = () => {
                     )}
                 </div>
 
-                <div className="user-info-section">
-                    <h2 className="username">Welcome, {username}</h2>
+                <div className={styles.UserInfo}>
+                    <h2 className={styles.Username}>Welcome, {username}!</h2>
 
-                    <div className="bio-section">
+                    <div className={styles.Bio}>
                         {isEditing.bio ? (
                             <>
                                 <textarea
-                                    className="bio-textarea"
+                                    className={styles.BioTextarea}
                                     value={bio}
                                     onChange={(e) => setBio(e.target.value)}
                                     placeholder="Enter your bio"
                                 />
-                                <div className="bio-action-buttons">
+                                <div className={styles.BioButtons}>
                                     <button
-                                        className="save-bio-btn"
+                                        className={styles.BioSave}
                                         onClick={handleBioUpdate}
                                     >
                                         Save Bio
                                     </button>
                                     <button
-                                        className="cancel-bio-btn"
+                                        className={styles.BioCancel}
                                         onClick={() => setIsEditing(prev => ({ ...prev, bio: false }))}
                                     >
                                         Cancel
@@ -170,9 +170,9 @@ const UserPanel = () => {
                             </>
                         ) : (
                             <>
-                                <p className="bio-text">{bio || 'No bio set'}</p>
+                                <p className={styles.BioText}>{bio || 'No bio set'}</p>
                                 <button
-                                    className="edit-bio-btn"
+                                    className={styles.EditBio}
                                     onClick={() => setIsEditing(prev => ({ ...prev, bio: true }))}
                                 >
                                     Edit Bio
@@ -182,8 +182,8 @@ const UserPanel = () => {
                     </div>
                 </div>
             </div>
-        </div>
-    );
+        </>
+        );
 };
 
 export default UserPanel;

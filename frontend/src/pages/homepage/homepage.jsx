@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from 'framer-motion';
 import HeaderImage from '../assets/HomepageHeader.png';
 import DefaultPfp from '../assets/default_pfp.jpg';
+import styles from './homepage.module.scss';
 
 const Card = ({ children }) => {
     return (

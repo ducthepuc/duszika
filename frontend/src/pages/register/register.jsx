@@ -78,7 +78,7 @@ function RegisterPage() {
                         required placeholder="repeat /:"/>
           <br/>
           <br/>
-          <motion.button type="submit" type="password"
+          <motion.button type="submit"
                          whileHover={{scale: 1.02}}
                          whileTap={{scale: 0.9}}
                          className={styles.mainButton}>CREATE➢
