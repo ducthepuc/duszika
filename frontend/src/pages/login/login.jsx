@@ -36,10 +36,10 @@ function Login() {
 
   return (
     <>
-      <h1 style={{ fontSize: '2rem', textAlign: 'center' }}>Login to Flare</h1>
+      <h1 style={{color: '#FF6B35', fontSize: '2rem', textAlign: 'center' }}>Login to Flare</h1>
       <p style={{ textAlign: 'center' }}>
         Don't have an account yet? <br/>
-        <Link to="/register" style={{ color: '#007bff', textDecoration: 'none' }}>Register!</Link>
+        <Link to="/register" style={{ color: '#FF6B35', textDecoration: 'none' }}>Register!</Link>
       </p>
       <div style={{ width: '100%', maxWidth: '400px', margin: '0 auto' }}>
         <form onSubmit={handleLogin}>
@@ -55,10 +55,12 @@ function Login() {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="/:"
             style={{
+                color: 'rgb(240, 240, 240)',
+                backgroundColor: '#333333',
               width: '100%',
               padding: '10px',
               marginBottom: '15px',
-              border: '1px solid #ccc',
+              border: '1px solid #555',
               borderRadius: '4px',
             }}
           />
@@ -75,10 +77,12 @@ function Login() {
             onChange={(e) => setPassword(e.target.value)}
             placeholder="/:"
             style={{
+                color: 'rgb(240, 240, 240)',
+                backgroundColor: '#333333',
               width: '100%',
               padding: '10px',
               marginBottom: '15px',
-              border: '1px solid #ccc',
+              border: '1px solid #555',
               borderRadius: '4px',
             }}
           />
@@ -93,7 +97,7 @@ function Login() {
             style={{
               width: '100%',
               padding: '10px',
-              backgroundColor: '#007bff',
+              backgroundColor: '#FF6B35',
               color: '#fff',
               border: 'none',
               borderRadius: '4px',

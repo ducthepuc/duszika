@@ -5,6 +5,7 @@ import { Lesson } from '../components/StepTypes/Lesson/Lesson.jsx';
 import { Question } from '../components/StepTypes/Question/Question';
 import { useSteps } from '../hooks/useSteps.jsx';
 import { formatCourseData } from '../utils/courseDataFormatter.jsx';
+import { motion } from 'framer-motion';
 
 function CourseCreator() {
     const [title, setTitle] = useState('');
@@ -117,18 +118,57 @@ function CourseCreator() {
 
     return (
         <div className="p-5">
-            <input
+            <motion.input
                 type="text"
                 placeholder="Course Title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full p-2 mb-4 border border-gray-300 rounded-md"
+                style={{
+                    width: '75%',
+                    padding: '12px',
+                    marginBottom: '16px',
+                    border: '1px solid #444',
+                    borderRadius: '8px',
+                    backgroundColor: '#333333',
+                    color: 'white',
+                    outline: 'none',
+                    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                    fontSize: '16px',
+                }}
+                whileHover={{
+                    backgroundColor: '#444444',
+                }}
+                whileFocus={{
+                    backgroundColor: '#555555',
+                    border: '1px solid #FF7F4F',
+                }}
             />
-            <textarea
+
+            <motion.textarea
                 placeholder="Course Description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="w-full p-2 mb-4 border border-gray-300 rounded-md"
+                style={{
+                    width: '75%',
+                    height: '250px',
+                    padding: '12px',
+                    marginBottom: '16px',
+                    border: '1px solid #444',
+                    borderRadius: '8px',
+                    backgroundColor: '#333333',
+                    color: 'white',
+                    outline: 'none',
+                    resize: 'none',
+                    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                    fontSize: '16px',
+                }}
+                whileHover={{
+                    backgroundColor: '#444444',
+                }}
+                whileFocus={{
+                    backgroundColor: '#555555',
+                    border: '1px solid #FF7F4F',
+                }}
             />
 
             {steps.map((step, stepIndex) => (

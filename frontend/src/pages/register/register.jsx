@@ -32,19 +32,21 @@ function RegisterPage() {
 
   return (
     <>
-      <h1 style={{ textAlign: 'center', fontSize: '2rem', margin: '20px 0' }}>Register to Flare</h1>
+      <h1 style={{ color: '#FF6B35', textAlign: 'center', fontSize: '2rem', margin: '20px 0' }}>Register to Flare</h1>
       <p style={{ textAlign: 'center', marginBottom: '20px' }}>
         Already have an account? <br/>
-        <Link style={{ color: '#007bff', textDecoration: 'none' }} to="/login">Login!</Link>
+        <Link style={{ color: '#FF6B35', textDecoration: 'none' }} to="/login">Login!</Link>
       </p>
       <div style={{ maxWidth: '500px', margin: '0 auto', padding: '20px', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
           <label htmlFor="username" style={{ fontWeight: 'bold' }}>Username</label>
           <motion.input
             style={{
+                color: 'rgb(240, 240, 240)',
+                backgroundColor: '#333333',
               padding: '10px',
               borderRadius: '4px',
-              border: '1px solid #ccc',
+              border: '1px solid #555',
               fontSize: '1rem',
             }}
             whileHover={{ scale: 1.02 }}
@@ -61,9 +63,11 @@ function RegisterPage() {
           <label htmlFor="email" style={{ fontWeight: 'bold' }}>E-mail</label>
           <motion.input
             style={{
+                color: 'rgb(240, 240, 240)',
+                backgroundColor: '#333333',
               padding: '10px',
               borderRadius: '4px',
-              border: '1px solid #ccc',
+              border: '1px solid #555',
               fontSize: '1rem',
             }}
             whileHover={{ scale: 1.02 }}
@@ -80,9 +84,11 @@ function RegisterPage() {
           <label htmlFor="password" style={{ fontWeight: 'bold' }}>Password</label>
           <motion.input
             style={{
+                color: 'rgb(240, 240, 240)',
+                backgroundColor: '#333333',
               padding: '10px',
               borderRadius: '4px',
-              border: '1px solid #ccc',
+              border: '1px solid #555',
               fontSize: '1rem',
             }}
             whileHover={{ scale: 1.02 }}
@@ -98,9 +104,11 @@ function RegisterPage() {
           <br/>
           <motion.input
             style={{
+                color: 'rgb(240, 240, 240)',
+                backgroundColor: '#333333',
               padding: '10px',
               borderRadius: '4px',
-              border: '1px solid #ccc',
+              border: '1px solid #555',
               fontSize: '1rem',
             }}
             whileHover={{ scale: 1.02 }}
@@ -119,7 +127,7 @@ function RegisterPage() {
             style={{
               padding: '12px 20px',
               borderRadius: '4px',
-              backgroundColor: '#007bff',
+              backgroundColor: '#FF6B35',
               color: 'white',
               fontSize: '1rem',
               border: 'none',

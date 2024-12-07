@@ -1,6 +1,7 @@
 import React from 'react';
 import { AcceptedAnswers } from './AcceptedAnswers.jsx';
 import { HighlightedElements } from './HighlightedElements.jsx';
+import {motion} from 'framer-motion';
 
 export function CodeTask({
                              step,
@@ -15,11 +16,31 @@ export function CodeTask({
     return (
         <div>
             <h3>Coding Task</h3>
-            <textarea
+            <motion.textarea
                 placeholder="Task Description"
                 value={step.task}
                 onChange={(e) => handleStepChange(stepIndex, 'task', e.target.value)}
-                className="w-full p-2 mb-4 border border-gray-300 rounded-md"
+                style={{
+                    width: '75%',
+                    height: '250px',
+                    padding: '12px',
+                    marginBottom: '16px',
+                    border: '1px solid #444',
+                    borderRadius: '8px',
+                    backgroundColor: '#333333',
+                    color: 'white',
+                    outline: 'none',
+                    resize: 'none',
+                    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                    fontSize: '16px',
+                }}
+                whileHover={{
+                    backgroundColor: '#444444',
+                }}
+                whileFocus={{
+                    backgroundColor: '#555555',
+                    border: '1px solid #FF7F4F',
+                }}
             />
 
             <HighlightedElements

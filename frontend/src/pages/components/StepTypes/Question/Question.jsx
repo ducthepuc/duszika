@@ -1,5 +1,6 @@
 import React from 'react';
 import { AnswerOption } from './AnswerOption.jsx';
+import {motion} from 'framer-motion';
 
 export function Question({
                              step,
@@ -13,12 +14,30 @@ export function Question({
     return (
         <div>
             <h3>{step.questionType === 'true-false' ? 'True/False Question' : 'Multiple Choice Question'}</h3>
-            <input
+            <motion.input
                 type="text"
                 placeholder="Question Text"
                 value={step.questionText}
                 onChange={(e) => handleStepChange(stepIndex, 'questionText', e.target.value)}
-                className="w-full p-2 mb-4 border border-gray-300 rounded-md"
+                style={{
+                    width: '66%',
+                    padding: '12px',
+                    marginBottom: '16px',
+                    border: '1px solid #444',
+                    borderRadius: '8px',
+                    backgroundColor: '#333333',
+                    color: 'white',
+                    outline: 'none',
+                    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                    fontSize: '16px',
+                }}
+                whileHover={{
+                    backgroundColor: '#444444',
+                }}
+                whileFocus={{
+                    backgroundColor: '#555555',
+                    border: '1px solid #FF7F4F',
+                }}
             />
             {step.answers.map((answer, answerIndex) => (
                 <AnswerOption

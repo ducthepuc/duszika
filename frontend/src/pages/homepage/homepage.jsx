@@ -7,9 +7,9 @@ import { Input } from 'reactstrap';
 const Card = ({ children, onClick }) => {
     return (
         <motion.div 
-            style={{ backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', cursor: 'pointer' }}
-            whileHover={{ scale: 1.05 }} 
-            whileTap={{ scale: 0.95 }}
+            style={{ backgroundColor: '#FF6B35', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', cursor: 'pointer' }}
+            whileHover={{ scale: 1.05, backgroundColor: '#FF7F4F'}}
+            whileTap={{ scale: 0.95, backgroundColor: 'rgb(240, 240, 240)' }}
             onClick={onClick}
         >
             {children}
@@ -134,12 +134,13 @@ const HomePage = () => {
 
             {/* Centered Search Bar */}
             <div style={{ margin: '20px 0' }}>
-                <input 
+                <motion.input
                     type="text" 
-                    placeholder="Search courses..." 
+                    placeholder="Search courses..."
                     value={searchInput} 
                     onChange={handleSearch}
-                    style={{ padding: '10px', width: '100%', maxWidth: '400px', margin: '0 auto', display: 'block' }}
+                    style={{ color: 'rgb(240, 240, 240)', backgroundColor: '#333333',padding: '10px', width: '100%', maxWidth: '600px', margin: '0 auto', display: 'block', border: '1px solid #555' }}
+                    whileHover={{ scale: 1.05, border: '1px solid #FF7F4F' }}
                 />
             </div>
 
