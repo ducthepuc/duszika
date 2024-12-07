@@ -1,38 +1,67 @@
-import { useState } from 'react';
-import { Navigate, useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import { CodeTask } from '../components/StepTypes/CodeTask/CodeTask.jsx';
+import { Lesson } from '../components/StepTypes/Lesson/Lesson.jsx';
+import { Question } from '../components/StepTypes/Question/Question';
+import { useSteps } from '../hooks/useSteps.jsx';
+import { formatCourseData } from '../utils/courseDataFormatter.jsx';
 
 function CourseCreator() {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [steps, setSteps] = useState([]);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const navigate = useNavigate();
+    const { steps, setSteps, addStep, removeStep, updateStep } = useSteps();
 
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
     };
 
-    const addStep = (type) => {
-        const newStep = {
-            type,
-            content: type === 'lesson' ? [{ type: 'text-block', text: '' }] : [],
-            questionText: '',
-            questionType: type === 'true-false' ? 'true-false' : 'multiple-choice',
-            answers: [],
-        };
-        setSteps([...steps, newStep]);
-        setIsDropdownOpen(false);
+    const handleStepChange = (index, field, value) => {
+        updateStep(index, field, value);
     };
 
-    const handleStepChange = (index, field, value) => {
+    const handleHighlightedElementChange = (stepIndex, elementIndex, value) => {
         const newSteps = [...steps];
-        newSteps[index][field] = value;
+        if (!newSteps[stepIndex].highlightedElements) {
+            newSteps[stepIndex].highlightedElements = [];
+        }
+
+        if (elementIndex === newSteps[stepIndex].highlightedElements.length) {
+            newSteps[stepIndex].highlightedElements.push(value);
+        } else {
+            newSteps[stepIndex].highlightedElements[elementIndex] = value;
+        }
+        setSteps(newSteps);
+    };
+
+    const removeHighlightedElement = (stepIndex, elementIndex) => {
+        const newSteps = [...steps];
+        newSteps[stepIndex].highlightedElements.splice(elementIndex, 1);
+        setSteps(newSteps);
+    };
+
+    const addAcceptedAnswer = (stepIndex) => {
+        const newSteps = [...steps];
+        newSteps[stepIndex].acceptedAnswers.push({code: ''});
+        setSteps(newSteps);
+    };
+
+    const removeAcceptedAnswer = (stepIndex, answerIndex) => {
+        const newSteps = [...steps];
+        newSteps[stepIndex].acceptedAnswers.splice(answerIndex, 1);
+        setSteps(newSteps);
+    };
+
+    const handleAcceptedAnswerChange = (stepIndex, answerIndex, value) => {
+        const newSteps = [...steps];
+        newSteps[stepIndex].acceptedAnswers[answerIndex].code = value;
         setSteps(newSteps);
     };
 
     const addAnswerOption = (stepIndex) => {
         const newSteps = [...steps];
-        newSteps[stepIndex].answers.push({ text: '', correct: false });
+        newSteps[stepIndex].answers.push({text: '', correct: false});
         setSteps(newSteps);
     };
 
@@ -54,38 +83,13 @@ function CourseCreator() {
         setSteps(newSteps);
     };
 
-    const removeStep = (stepIndex) => {
-        const newSteps = [...steps];
-        newSteps.splice(stepIndex, 1);
-        setSteps(newSteps);
+    const handleAddStep = (type) => {
+        addStep(type);
+        setIsDropdownOpen(false);
     };
 
     const saveCourse = async () => {
-        const courseData = {
-            title,
-            description,
-            elements: steps.map(step => {
-                if (step.type === 'lesson') {
-                    return {
-                        type: 'lesson',
-                        content: step.content.map(contentItem => ({
-                            type: contentItem.type,
-                            text: contentItem.text,
-                        })),
-                    };
-                } else if (step.type === 'question') {
-                    return {
-                        type: 'question',
-                        questionType: step.questionType,
-                        questionText: step.questionText,
-                        answers: step.answers.map(answer => ({
-                            text: answer.text,
-                            correct: answer.correct,
-                        })),
-                    };
-                }
-            }),
-        };
+        const courseData = formatCourseData(title, description, steps);
 
         try {
             const response = await fetch('/api/file_upload', {
@@ -112,193 +116,111 @@ function CourseCreator() {
     };
 
     return (
-        <div style={{ padding: '20px' }}>
-            <h2>Create a New Course</h2>
-
+        <div className="p-5">
             <input
                 type="text"
                 placeholder="Course Title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                style={{
-                    width: '100%',
-                    padding: '10px',
-                    marginBottom: '15px',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                }}
+                className="w-full p-2 mb-4 border border-gray-300 rounded-md"
             />
             <textarea
                 placeholder="Course Description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                style={{
-                    width: '100%',
-                    padding: '10px',
-                    marginBottom: '15px',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                }}
+                className="w-full p-2 mb-4 border border-gray-300 rounded-md"
             />
 
             {steps.map((step, stepIndex) => (
-                <div key={stepIndex} style={{ border: '1px solid #ddd', margin: '10px', padding: '10px' }}>
-                    <button onClick={() => removeStep(stepIndex)} style={{ float: 'right', color: 'red', background: 'none', border: 'none', cursor: 'pointer' }}>Delete Step</button>
+                <div key={stepIndex} className="border border-gray-300 m-2 p-4 rounded-md">
+                    <button
+                        onClick={() => removeStep(stepIndex)}
+                        className="float-right text-red-500 hover:text-red-700"
+                    >
+                        Delete Step
+                    </button>
 
                     {step.type === 'lesson' && (
-                        <div>
-                            <h3>Lesson Content</h3>
-                            {step.content.map((contentItem, contentIndex) => (
-                                <div key={contentIndex} style={{ marginBottom: '10px' }}>
-                                    <textarea
-                                        placeholder="Lesson Text"
-                                        value={contentItem.text}
-                                        onChange={(e) => {
-                                            const newSteps = [...steps];
-                                            newSteps[stepIndex].content[contentIndex].text = e.target.value;
-                                            setSteps(newSteps);
-                                        }}
-                                        style={{
-                                            width: '100%',
-                                            padding: '10px',
-                                            marginBottom: '15px',
-                                            border: '1px solid #ccc',
-                                            borderRadius: '4px',
-                                        }}
-                                    />
-                                </div>
-                            ))}
-                        </div>
+                        <Lesson
+                            step={step}
+                            stepIndex={stepIndex}
+                            steps={steps}
+                            setSteps={setSteps}
+                        />
                     )}
 
                     {step.type === 'question' && (
-                        <div>
-                            <h3>{step.questionType === 'true-false' ? 'True/False Question' : 'Multiple Choice Question'}</h3>
-                            <input
-                                type="text"
-                                placeholder="Question Text"
-                                value={step.questionText}
-                                onChange={(e) => handleStepChange(stepIndex, 'questionText', e.target.value)}
-                                style={{
-                                    width: '100%',
-                                    padding: '10px',
-                                    marginBottom: '15px',
-                                    border: '1px solid #ccc',
-                                    borderRadius: '4px',
-                                }}
-                            />
-                            {step.answers.map((answer, answerIndex) => (
-                                <div key={answerIndex} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-                                    <input
-                                        type="text"
-                                        placeholder={`Answer ${answerIndex + 1}`}
-                                        value={answer.text}
-                                        onChange={(e) => handleAnswerChange(stepIndex, answerIndex, e.target.value)}
-                                        style={{
-                                            width: '70%',
-                                            padding: '10px',
-                                            marginRight: '10px',
-                                            border: '1px solid #ccc',
-                                            borderRadius: '4px',
-                                        }}
-                                    />
-                                    <input
-                                        type={step.questionType === 'true-false' ? 'radio' : 'checkbox'}
-                                        checked={answer.correct}
-                                        onChange={() => toggleCorrectAnswer(stepIndex, answerIndex)}
-                                    />
-                                    <button onClick={() => removeAnswerOption(stepIndex, answerIndex)} style={{ color: 'red', marginLeft: '5px', background: 'none', border: 'none', cursor: 'pointer' }}>X</button>
-                                </div>
-                            ))}
-                            <button
-                                onClick={() => addAnswerOption(stepIndex)}
-                                style={{
-                                    padding: '8px 12px',
-                                    backgroundColor: '#007bff',
-                                    color: 'white',
-                                    border: 'none',
-                                    borderRadius: '4px',
-                                    cursor: 'pointer',
-                                    marginBottom: '10px',
-                                }}
-                            >
-                                Add Answer Option
-                            </button>
-                        </div>
+                        <Question
+                            step={step}
+                            stepIndex={stepIndex}
+                            handleStepChange={handleStepChange}
+                            handleAnswerChange={handleAnswerChange}
+                            toggleCorrectAnswer={toggleCorrectAnswer}
+                            removeAnswerOption={removeAnswerOption}
+                            addAnswerOption={addAnswerOption}
+                        />
+                    )}
+
+                    {step.type === 'code-task' && (
+                        <CodeTask
+                            step={step}
+                            stepIndex={stepIndex}
+                            handleStepChange={handleStepChange}
+                            handleHighlightedElementChange={handleHighlightedElementChange}
+                            removeHighlightedElement={removeHighlightedElement}
+                            addAcceptedAnswer={addAcceptedAnswer}
+                            removeAcceptedAnswer={removeAcceptedAnswer}
+                            handleAcceptedAnswerChange={handleAcceptedAnswerChange}
+                        />
                     )}
                 </div>
             ))}
 
-            <div style={{ position: 'relative', display: 'inline-block' }}>
+            <div className="relative inline-block">
                 <button
                     onClick={toggleDropdown}
-                    style={{
-                        padding: '10px 20px',
-                        backgroundColor: '#28a745',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                    }}
+                    className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
                 >
                     Add Step
                 </button>
                 {isDropdownOpen && (
-                    <div style={{
-                        position: 'absolute',
-                        backgroundColor: '#333',
-                        color: '#fff',
-                        boxShadow: '0px 8px 16px 0px rgba(0,0,0,0.2)',
-                        zIndex: 1,
-                        width: '200px',
-                        padding: '8px 0',
-                        borderRadius: '4px',
-                    }}>
+                    <div className="absolute bg-gray-800 text-white shadow-lg z-10 w-48 rounded-md">
                         <div
-                            onClick={() => addStep('lesson')}
-                            style={{ padding: '8px', cursor: 'pointer', textAlign: 'center' }}
+                            onClick={() => handleAddStep('lesson')}
+                            className="p-2 hover:bg-gray-700 cursor-pointer text-center"
                         >
                             Lesson
                         </div>
                         <div
-                            onClick={() => addStep('question')}
-                            style={{ padding: '8px', cursor: 'pointer', textAlign: 'center' }}
+                            onClick={() => handleAddStep('question')}
+                            className="p-2 hover:bg-gray-700 cursor-pointer text-center"
                         >
                             Question
+                        </div>
+                        <div
+                            onClick={() => handleAddStep('code-task')}
+                            className="p-2 hover:bg-gray-700 cursor-pointer text-center"
+                        >
+                            Coding Task
                         </div>
                     </div>
                 )}
             </div>
-            <br />
-            <button
-                onClick={saveCourse}
-                style={{
-                    padding: '10px 20px',
-                    backgroundColor: '#007bff',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    marginTop: '20px',
-                }}
-            >
-                Save Course
-            </button>
-            <br />
-            <button
-                onClick={() => navigate('/homepage')}
-                style={{
-                    padding: '10px 20px',
-                    backgroundColor: '#FF0000',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    marginTop: '20px',
-                }}
-            >
-                Back to homepage
-            </button>
+
+            <div className="mt-4 space-y-2">
+                <button
+                    onClick={saveCourse}
+                    className="w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                >
+                    Save Course
+                </button>
+                <button
+                    onClick={() => navigate('/homepage')}
+                    className="w-full px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                >
+                    Back to homepage
+                </button>
+            </div>
         </div>
     );
 }
