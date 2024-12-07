@@ -21,7 +21,7 @@ def user_auth():
 @auth_bp.route('/api/user_make:def', methods=["POST"])
 def user_registry():
     request_data = request.json
-    uname = request_data.get('username')
+    uname = request_data.get('name')
     email = request_data.get('email')
     pwd = request_data.get('password')
     pwd2 = request_data.get('confirm_password')

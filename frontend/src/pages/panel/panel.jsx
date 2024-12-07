@@ -25,7 +25,7 @@ const UserPanel = () => {
             }
 
             try {
-                const response = await fetch('http://localhost:5000/api/get_user_by_token', {
+                const response = await fetch('http://localhost:5000/api/me', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -39,6 +39,7 @@ const UserPanel = () => {
                 }
 
                 const userData = await response.json();
+                console.log(userData)
                 setUsername(userData.username);
                 setBio(userData.bio || '');
 
@@ -62,11 +63,11 @@ const UserPanel = () => {
         if (!file) return;
 
         const formData = new FormData();
-        formData.append('profilePicture', file);
+        formData.append('pfp', file);
 
         try {
             const user_token = localStorage.getItem("userToken");
-            const response = await fetch('http://localhost:5000/api/upload_profile_picture', {
+            const response = await fetch('http://localhost:5000/api/change_pfp', {
                 method: 'POST',
                 headers: {
                     'Authorization': user_token
@@ -91,13 +92,13 @@ const UserPanel = () => {
     const handleBioUpdate = async () => {
         try {
             const user_token = localStorage.getItem("userToken");
-            const response = await fetch('http://localhost:5000/api/update_bio', {
-                method: 'POST',
+            const response = await fetch('http://localhost:5000/api/v1/configure', {
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': user_token
                 },
-                body: JSON.stringify({ bio })
+                body: JSON.stringify({"bio": bio })
             });
 
             if (!response.ok) {

@@ -27,7 +27,7 @@ app = f.Flask(__name__)
 CORS(app, 
      resources={r"/api/*": {
          "origins": ORIGINS,
-         "methods": ["GET", "POST", "OPTIONS"],
+         "methods": ["GET", "POST", "OPTIONS", "PUT"],
          "allow_headers": ["Content-Type", "Authorization"]
      }},
      supports_credentials=True)
