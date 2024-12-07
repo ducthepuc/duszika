@@ -91,30 +91,33 @@ function CourseCreator() {
 
     const saveCourse = async () => {
         const courseData = formatCourseData(title, description, steps);
+        if (title === "") {
+            alert("Please enter a title");
+        } else {
+            try {
+                const response = await fetch('/api/file_upload', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(courseData),
+                });
 
-        try {
-            const response = await fetch('/api/file_upload', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(courseData),
-            });
-
-            if (response.ok) {
-                const result = await response.json();
-                console.log('Course saved successfully:', result);
-                alert('Course saved successfully!');
-            } else {
-                const error = await response.json();
-                console.error('Failed to save course:', error);
-                alert(`Failed to save course: ${error.error || 'Unknown error'}`);
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('Course saved successfully:', result);
+                    alert('Course saved successfully!');
+                } else {
+                    const error = await response.json();
+                    console.error('Failed to save course:', error);
+                    alert(`Failed to save course: ${error.error || 'Unknown error'}`);
+                }
+            } catch (error) {
+                console.error('Error occurred:', error);
+                alert('An error occurred while saving the course.');
             }
-        } catch (error) {
-            console.error('Error occurred:', error);
-            alert('An error occurred while saving the course.');
         }
-    };
+        }
 
     return (
         <div className="p-5">

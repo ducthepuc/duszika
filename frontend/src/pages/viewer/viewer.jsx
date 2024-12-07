@@ -127,7 +127,6 @@ function Viewer() {
 
   const renderElement = (element, index) => {
     if (!element) return null;
-
     if (element.type === "lesson") {
       return (
           <div key={index} className="border border-gray-200 rounded-lg p-5 mb-5">
