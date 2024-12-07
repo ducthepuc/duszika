@@ -269,7 +269,7 @@ function CourseCreator() {
                     </div>
                 )}
             </div>
-
+            <br />
             <button
                 onClick={saveCourse}
                 style={{
@@ -284,7 +284,7 @@ function CourseCreator() {
             >
                 Save Course
             </button>
-
+            <br />
             <button
                 onClick={() => navigate('/homepage')}
                 style={{
