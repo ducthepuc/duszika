@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Editor from '@monaco-editor/react';
 import { Checkbox, Radio } from 'pretty-checkbox-react';
 import '@djthoms/pretty-checkbox';
+import {motion} from 'framer-motion';
 
 function Viewer() {
   const { courseTitle } = useParams();
@@ -129,7 +130,8 @@ function Viewer() {
     if (!element) return null;
     if (element.type === "lesson") {
       return (
-          <div key={index} className="border border-gray-200 rounded-lg p-5 mb-5">
+          <motion.div key={index} className="border border-gray-200 rounded-lg p-5 mb-5"
+          >
             {element.content.map((content, idx) => {
               if (content.type === "text-block") {
                 return <p key={idx} className="mb-4">{content.text}</p>;
@@ -158,7 +160,7 @@ function Viewer() {
               }
               return null;
             })}
-          </div>
+          </motion.div>
       );
     } else if (element.type === "question") {
       return (

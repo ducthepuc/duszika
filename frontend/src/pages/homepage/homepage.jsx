@@ -17,7 +17,7 @@ const Card = ({ children, onClick }) => {
     );
 };
 
-export const fetchUsername = async (navigate, setUsername, setIsLoading) => {
+export const fetchUsername = async (navigate, setUsername, setIsLoading, setPfp) => {
     const user_token = localStorage.getItem("userToken");
 
     if (!user_token) {
@@ -26,7 +26,7 @@ export const fetchUsername = async (navigate, setUsername, setIsLoading) => {
     }
 
     try {
-        const response = await fetch('http://localhost:5000/api/get_user_by_token', {
+        const response = await fetch('http://localhost:5000/api/me', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -43,7 +43,9 @@ export const fetchUsername = async (navigate, setUsername, setIsLoading) => {
 
         const userData = JSON.parse(responseData);
         setUsername(userData.username);
+        setPfp(userData.profilePicture);
         setIsLoading(false);
+
     } catch (error) {
         console.error("Error:", error);
         localStorage.removeItem("userToken");
@@ -58,6 +60,7 @@ const HomePage = () => {
     const [username, setUsername] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [courses, setCourses] = useState([]);
+    const [profilePicture, setPfp] = useState(DefaultPfp);
 
     const logout = () => {
         localStorage.removeItem("userToken");
@@ -97,7 +100,7 @@ const HomePage = () => {
     }, [searchInput, courses]);
 
     useEffect(() => {
-        fetchUsername(navigate, setUsername, setIsLoading);
+        fetchUsername(navigate, setUsername, setIsLoading, setPfp);
     }, [navigate]);
 
     const handleSearch = (e) => {
@@ -115,8 +118,8 @@ const HomePage = () => {
                 <div>
                     <h3>Welcome, {username || 'Guest'}</h3>
                     <div>
-                        <img 
-                            src={DefaultPfp} 
+                        <img
+                            src={profilePicture}
                             alt="Profile" 
                             style={{ width: '40px', height: '40px', borderRadius: '50%', cursor: 'pointer' }}
                             onClick={() => navigate('/panel')}

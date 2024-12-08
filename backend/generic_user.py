@@ -84,7 +84,7 @@ def change_pfp():
     uid = usr[0]
 
     file_stream = request.files.get('pfp')
-    file_stream.save(f'cdn/images/{uid}.png')
+    file_stream.save(f'../cdn/images/{uid}.png')
 
     return {
         "result": True

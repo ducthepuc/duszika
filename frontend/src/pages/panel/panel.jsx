@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import DefaultPfp from '../assets/default_pfp.jpg';
+import {motion} from 'framer-motion';
 
 const UserPanel = () => {
     const navigate = useNavigate();
@@ -128,7 +129,7 @@ const UserPanel = () => {
                         type="file"
                         accept="image/*"
                         onChange={handleProfilePictureUpload}
-                        style={{ marginTop: '10px' }}
+                        style={{ marginTop: '10px', backgroundColor: '#FF6B35' }}
                     />
                 ) : (
                     <button
@@ -136,7 +137,7 @@ const UserPanel = () => {
                         style={{
                             marginTop: '10px',
                             padding: '8px 16px',
-                            backgroundColor: '#007bff',
+                            backgroundColor: '#FF6B35',
                             color: 'white',
                             border: 'none',
                             borderRadius: '4px',
@@ -154,14 +155,27 @@ const UserPanel = () => {
                 <div style={{ marginBottom: '20px' }}>
                     {isEditing.bio ? (
                         <>
-                            <textarea
+                            <motion.textarea
                                 style={{
-                                    width: '100%',
-                                    padding: '10px',
-                                    marginBottom: '15px',
-                                    borderRadius: '4px',
-                                    border: '1px solid #ccc',
-                                    minHeight: '100px'
+                                    width: '75%',
+                                    height: '250px',
+                                    padding: '12px',
+                                    marginBottom: '16px',
+                                    border: '1px solid #444',
+                                    borderRadius: '8px',
+                                    backgroundColor: '#333333',
+                                    color: 'white',
+                                    outline: 'none',
+                                    resize: 'none',
+                                    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                                    fontSize: '16px',
+                                }}
+                                whileHover={{
+                                    backgroundColor: '#444444',
+                                }}
+                                whileFocus={{
+                                    backgroundColor: '#555555',
+                                    border: '1px solid #FF7F4F',
                                 }}
                                 value={bio}
                                 onChange={(e) => setBio(e.target.value)}
@@ -204,7 +218,7 @@ const UserPanel = () => {
                                 onClick={() => setIsEditing(prev => ({ ...prev, bio: true }))}
                                 style={{
                                     padding: '8px 16px',
-                                    backgroundColor: '#007bff',
+                                    backgroundColor: '#FF6B35',
                                     color: 'white',
                                     border: 'none',
                                     borderRadius: '4px',
