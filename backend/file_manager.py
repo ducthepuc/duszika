@@ -1,6 +1,6 @@
 import os
 import json
-from flask import request, jsonify, Blueprint
+from flask import request, jsonify, Blueprint, send_from_directory
 
 file_bp = Blueprint("file_manager", __name__)
 
@@ -56,17 +56,20 @@ def get_course_names():
 
 @file_bp.route('/api/courses/<courseTitle>', methods=['GET'])
 def get_course(courseTitle):
-    course_data = None
-    for course in os.listdir(COURSE_DIRECTORY):
-        if course.split(".")[0] == courseTitle:
-            course_file_path = os.path.join(COURSE_DIRECTORY, course)
-            with open(course_file_path, 'r') as file:
-                try:
-                    course_data = json.load(file)
-                except json.JSONDecodeError:
-                    return jsonify({"error": f"Failed to parse {courseTitle} course data"}), 500
+    # course_data = None
+    if ["..", "."] in courseTitle:
+        return {"message": "FUCK YOU"}
+    return send_from_directory('../cdn/courses', courseTitle + ".json")
+    # for course in os.listdir(COURSE_DIRECTORY):
+    #     if course.split(".")[0] == courseTitle:
+            # course_file_path = os.path.join(COURSE_DIRECTORY, course)
+            # with open(course_file_path, 'r') as file:
+            #     try:
+            #         course_data = json.load(file)
+            #     except json.JSONDecodeError:
+            #         return jsonify({"error": f"Failed to parse {courseTitle} course data"}), 500
     
-    if course_data:
-        return jsonify(course_data)
-    else:
-        return jsonify({"error": "Course not found"}), 404
+    # if course_data:
+    #     return jsonify(course_data)
+    # else:
+    #     return jsonify({"error": "Course not found"}), 404
