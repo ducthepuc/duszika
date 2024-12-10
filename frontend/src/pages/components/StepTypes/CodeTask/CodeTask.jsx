@@ -1,28 +1,35 @@
 import React from 'react';
 import { AcceptedAnswers } from './AcceptedAnswers.jsx';
-import { HighlightedElements } from './HighlightedElements.jsx';
-import {motion} from 'framer-motion';
+import { ExampleCode } from './ExampleCode.jsx';
+import { Help } from './Help.jsx';
+import { motion } from 'framer-motion';
 
 export function CodeTask({
-                             step,
-                             stepIndex,
-                             handleStepChange,
-                             handleHighlightedElementChange,
-                             removeHighlightedElement,
-                             addAcceptedAnswer,
-                             removeAcceptedAnswer,
-                             handleAcceptedAnswerChange,
-                         }) {
+    step,
+    stepIndex,
+    handleStepChange,
+    addAcceptedAnswer,
+    removeAcceptedAnswer,
+    handleAcceptedAnswerChange,
+}) {
+    const handleExampleCodeChange = (value) => {
+        handleStepChange(stepIndex, 'exampleCode', value);
+    };
+
+    const handleHelpChange = (value) => {
+        handleStepChange(stepIndex, 'help', value);
+    };
+
     return (
         <div>
             <h3>Coding Task</h3>
             <motion.textarea
-                placeholder="Task Description"
+                placeholder="Task Description (Use ** to highlight important text, e.g. **important**)"
                 value={step.task}
                 onChange={(e) => handleStepChange(stepIndex, 'task', e.target.value)}
                 style={{
                     width: '75%',
-                    height: '250px',
+                    height: '150px',
                     padding: '12px',
                     marginBottom: '16px',
                     border: '1px solid #444',
@@ -43,11 +50,14 @@ export function CodeTask({
                 }}
             />
 
-            <HighlightedElements
-                elements={step.highlightedElements || []}
-                onAdd={() => handleHighlightedElementChange(stepIndex, (step.highlightedElements || []).length, '')}
-                onRemove={(elementIndex) => removeHighlightedElement(stepIndex, elementIndex)}
-                onChange={(elementIndex, value) => handleHighlightedElementChange(stepIndex, elementIndex, value)}
+            <Help
+                help={step.help}
+                onChange={handleHelpChange}
+            />
+
+            <ExampleCode
+                code={step.exampleCode || ''}
+                onChange={handleExampleCodeChange}
             />
 
             <AcceptedAnswers
