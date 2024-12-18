@@ -7,3 +7,5 @@ prisma
 db_secrets.json
 reset.sql
 .idea
+*.pyc
+venv

@@ -6,19 +6,23 @@ export function useSteps() {
     const addStep = (type) => {
         const newStep = {
             type,
-            content: type === 'lesson' ? [{type: 'text-block', text: ''}] : [],
-            questionText: '',
-            questionType: type === 'true-false' ? 'true-false' : 'multiple-choice',
-            answers: [],
-            ...(type === 'code-task' && {
-                task: '',
-                highlightedElements: [],
-                exampleCode: '',
-                acceptedAnswers: [{code: ''}],
-            }),
+            task: '',
+            help: '',
+            exampleCode: '',
+            acceptedAnswers: [],
         };
+
+        if (type === 'question') {
+            newStep.questionText = '';
+            newStep.answers = [];
+        } else if (type === 'lesson') {
+            newStep.content = [{
+                type: 'text-block',
+                text: ''
+            }];
+        }
+
         setSteps([...steps, newStep]);
-        return newStep;
     };
 
     const removeStep = (stepIndex) => {

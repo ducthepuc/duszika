@@ -1,0 +1,38 @@
+{
+  "title": "Irok spacest lol",
+  "description": "Hehe",
+  "elements": [
+    {
+      "type": "lesson",
+      "content": [
+        {
+          "type": "text-block",
+          "text": "Fazszsz"
+        }
+      ]
+    },
+    {
+      "type": "question",
+      "questionText": "Melyik j\u00f3?",
+      "answers": [
+        {
+          "text": "Fekete",
+          "correct": false
+        },
+        {
+          "text": "Feh\u00e9r",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "type": "code-task",
+      "task": "print **feh\u00e9r**",
+      "help": "Ut\u00e1lom a cig\u00e1nyokat!",
+      "exampleCode": "print(\"vmi\")",
+      "acceptedAnswers": [
+        "print(\"feh\u00e9r\")"
+      ]
+    }
+  ]
+}

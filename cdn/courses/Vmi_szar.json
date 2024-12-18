@@ -1,0 +1,16 @@
+{
+  "title": "Vmi szar",
+  "description": "I love Bencze",
+  "elements": [
+    {
+      "type": "code-task",
+      "task": "Szex",
+      "highlightedElements": [],
+      "help": "KYS",
+      "exampleCode": "fasz",
+      "acceptedAnswers": [
+        "szeretem"
+      ]
+    }
+  ]
+}

@@ -22,26 +22,6 @@ function CourseCreator() {
         updateStep(index, field, value);
     };
 
-    const handleHighlightedElementChange = (stepIndex, elementIndex, value) => {
-        const newSteps = [...steps];
-        if (!newSteps[stepIndex].highlightedElements) {
-            newSteps[stepIndex].highlightedElements = [];
-        }
-
-        if (elementIndex === newSteps[stepIndex].highlightedElements.length) {
-            newSteps[stepIndex].highlightedElements.push(value);
-        } else {
-            newSteps[stepIndex].highlightedElements[elementIndex] = value;
-        }
-        setSteps(newSteps);
-    };
-
-    const removeHighlightedElement = (stepIndex, elementIndex) => {
-        const newSteps = [...steps];
-        newSteps[stepIndex].highlightedElements.splice(elementIndex, 1);
-        setSteps(newSteps);
-    };
-
     const addAcceptedAnswer = (stepIndex) => {
         const newSteps = [...steps];
         newSteps[stepIndex].acceptedAnswers.push({code: ''});
@@ -209,8 +189,6 @@ function CourseCreator() {
                             step={step}
                             stepIndex={stepIndex}
                             handleStepChange={handleStepChange}
-                            handleHighlightedElementChange={handleHighlightedElementChange}
-                            removeHighlightedElement={removeHighlightedElement}
                             addAcceptedAnswer={addAcceptedAnswer}
                             removeAcceptedAnswer={removeAcceptedAnswer}
                             handleAcceptedAnswerChange={handleAcceptedAnswerChange}

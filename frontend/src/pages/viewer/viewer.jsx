@@ -17,16 +17,18 @@ function Viewer() {
   const [editorHeight, setEditorHeight] = useState(300);
   const [codeTaskAnswers, setCodeTaskAnswers] = useState({});
   const [codeTaskResults, setCodeTaskResults] = useState({});
+  const [showHelp, setShowHelp] = useState(false);
 
   useEffect(() => {
     const fetchCourseData = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch(`/api/courses/${courseTitle}`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
+        const response = await fetch(`/api/courses/${encodeURIComponent(courseTitle)}`);
         const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || `HTTP error! status: ${response.status}`);
+        }
 
         // Validate course data
         if (!data || !Array.isArray(data.elements)) {
@@ -43,7 +45,9 @@ function Viewer() {
       }
     };
 
-    fetchCourseData();
+    if (courseTitle) {
+      fetchCourseData();
+    }
   }, [courseTitle]);
 
   const handleAnswerSelect = (questionIndex, answerIndex) => {
@@ -191,65 +195,90 @@ function Viewer() {
     } else if (element.type === "code-task") {
       return (
           <div key={index} className="border border-gray-200 rounded-lg p-5 mb-5">
-            <p className="text-lg font-medium mb-4">{element.task}</p>
+              <div className="flex justify-between items-start mb-4">
+                  <p className="text-lg font-medium">
+                      {element.task.split('**').map((part, i) => 
+                          i % 2 === 0 ? 
+                              <span key={i}>{part}</span> : 
+                              <span key={i} className="bg-yellow-200 text-black px-1 rounded">{part}</span>
+                      )}
+                  </p>
+                  {element.help && (
+                      <button
+                          onClick={() => setShowHelp(!showHelp)}
+                          className="ml-2 p-2 text-gray-500 hover:text-gray-700"
+                          title={showHelp ? "Hide help" : "Show help"}
+                      >
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                      </button>
+                  )}
+              </div>
 
-            {element.exampleCode && (
-                <div className="mb-4">
-                  <p className="text-md font-semibold mb-2">Example Code:</p>
-                  <Editor
-                      defaultLanguage="javascript"
-                      value={element.exampleCode}
-                      width="100%"
-                      height="200px"
-                      options={{
-                        readOnly: true,
-                        minimap: { enabled: false },
-                        scrollBeyondLastLine: false,
-                        automaticLayout: true,
-                        contextmenu: false
-                      }}
-                      theme="vs-dark"
-                  />
-                </div>
-            )}
+              {showHelp && element.help && (
+                  <div className="mb-4 p-4 bg-blue-100 text-blue-800 rounded-lg">
+                      <p className="text-sm">{element.help}</p>
+                  </div>
+              )}
 
-            <div className="mb-4">
-              <p className="text-md font-semibold mb-2">Your Solution:</p>
-              <Editor
-                  defaultLanguage="javascript"
-                  value={codeTaskAnswers[index] || ''}
-                  width="100%"
-                  height="250px"
-                  onChange={(value) => handleCodeTaskAnswer(index, value)}
-                  options={{
-                    minimap: { enabled: false },
-                    scrollBeyondLastLine: false,
-                    automaticLayout: true,
-                    contextmenu: true
-                  }}
-                  theme="vs-dark"
-              />
+              {element.exampleCode && (
+                  <div className="mb-4">
+                      <p className="text-md font-semibold mb-2">Example Code:</p>
+                      <Editor
+                          defaultLanguage="javascript"
+                          value={element.exampleCode}
+                          width="100%"
+                          height="200px"
+                          options={{
+                              readOnly: true,
+                              minimap: { enabled: false },
+                              scrollBeyondLastLine: false,
+                              automaticLayout: true,
+                              contextmenu: false
+                          }}
+                          theme="vs-dark"
+                      />
+                  </div>
+              )}
+
+              <div className="mb-4">
+                <p className="text-md font-semibold mb-2">Your Solution:</p>
+                <Editor
+                    defaultLanguage="javascript"
+                    value={codeTaskAnswers[index] || ''}
+                    width="100%"
+                    height="250px"
+                    onChange={(value) => handleCodeTaskAnswer(index, value)}
+                    options={{
+                      minimap: { enabled: false },
+                      scrollBeyondLastLine: false,
+                      automaticLayout: true,
+                      contextmenu: true
+                    }}
+                    theme="vs-dark"
+                />
+              </div>
+
+              <button
+                  onClick={() => checkCodeTaskAnswer(index)}
+                  className="w-full px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 mt-2"
+              >
+                Check Solution
+              </button>
+
+              {codeTaskResults[index] && (
+                  <div
+                      className={`mt-2 p-2 rounded ${
+                          codeTaskResults[index].isCorrect
+                              ? 'bg-green-100 text-green-800'
+                              : 'bg-red-100 text-red-800'
+                      }`}
+                  >
+                    {codeTaskResults[index].message}
+                  </div>
+              )}
             </div>
-
-            <button
-                onClick={() => checkCodeTaskAnswer(index)}
-                className="w-full px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 mt-2"
-            >
-              Check Solution
-            </button>
-
-            {codeTaskResults[index] && (
-                <div
-                    className={`mt-2 p-2 rounded ${
-                        codeTaskResults[index].isCorrect
-                            ? 'bg-green-100 text-green-800'
-                            : 'bg-red-100 text-red-800'
-                    }`}
-                >
-                  {codeTaskResults[index].message}
-                </div>
-            )}
-          </div>
       );
     }
 
@@ -272,13 +301,15 @@ function Viewer() {
   if (!courseData || !courseData.elements || courseData.elements.length === 0) {
     return (
         <div className="flex justify-center items-center h-screen flex-col">
-          <p className="text-xl text-red-600 mb-4">Course not found or invalid</p>
-          <button
-              onClick={() => navigate('/homepage')}
-              className="px-6 py-2 bg-blue-500 text-white rounded-md"
-          >
-            Return to Homepage
-          </button>
+            <p className="text-xl text-red-600 mb-4">
+                {courseData === null ? 'Failed to load course' : 'Course not found or invalid'}
+            </p>
+            <button
+                onClick={() => navigate('/homepage')}
+                className="px-6 py-2 bg-blue-500 text-white rounded-md"
+            >
+                Return to Homepage
+            </button>
         </div>
     );
   }
