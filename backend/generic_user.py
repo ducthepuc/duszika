@@ -1,5 +1,6 @@
 from flask import Blueprint, request, send_from_directory, abort
 import dbmanager as dbm
+from PIL import Image
 
 user_bp = Blueprint('generic_user', __name__)
 
@@ -84,6 +85,17 @@ def change_pfp():
     uid = usr[0]
 
     file_stream = request.files.get('pfp')
+
+    img = Image.open(file_stream.stream)
+    img.verify()
+
+    width, height = img.size
+
+    if width > 200 or height > 200:
+        return {
+            "result": False
+        }
+
     file_stream.save(f'../cdn/images/{uid}.png')
 
     return {
