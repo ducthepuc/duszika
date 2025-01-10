@@ -8,6 +8,7 @@ file_bp = Blueprint("file_manager", __name__)
 
 COURSE_DIRECTORY = '../cdn/courses'
 
+
 def get_course_names_from_files():
     course_names = []
     for course in os.listdir(COURSE_DIRECTORY):
@@ -15,6 +16,7 @@ def get_course_names_from_files():
             course_name = course.split(".")[0].replace('_', ' ')
             course_names.append(course_name)
     return course_names
+
 
 @file_bp.route('/api/file_upload', methods=['POST'])
 def save_course():
@@ -35,7 +37,8 @@ def save_course():
         save_directory = os.path.join(os.path.dirname(__file__), COURSE_DIRECTORY)
         os.makedirs(save_directory, exist_ok=True)
 
-        if 'elements' not in course_data or not isinstance(course_data['elements'], list) or not course_data['elements']:
+        if 'elements' not in course_data or not isinstance(course_data['elements'], list) or not course_data[
+            'elements']:
             return jsonify({"error": "Course elements cannot be empty"}), 400
 
         file_path = os.path.join(save_directory, f"{course_title}.json")
@@ -47,7 +50,6 @@ def save_course():
     except Exception as e:
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
 
-    
 
 @file_bp.route('/api/get_course_names', methods=['GET'])
 def get_course_names():
@@ -56,21 +58,21 @@ def get_course_names():
         return jsonify({"course_names": course_names}), 200
     except Exception as e:
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
-    
+
 
 @file_bp.route('/api/courses/<courseTitle>', methods=['GET'])
 def get_course(courseTitle):
     try:
         # Decode the URL-encoded course title and replace spaces with underscores
         courseTitle = urllib.parse.unquote(courseTitle).replace(' ', '_')
-        
+
         # Sanitize the course title and ensure it has .json extension
         filename = secure_filename(courseTitle) + '.json'
-        
+
         # Get absolute path to course directory
         course_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), COURSE_DIRECTORY))
         course_path = os.path.join(course_dir, filename)
-        
+
         # Check if the file exists
         if not os.path.exists(course_path):
             return jsonify({
@@ -80,7 +82,7 @@ def get_course(courseTitle):
                     'search_path': course_path
                 }
             }), 404
-            
+
         # Read and return the course data
         try:
             with open(course_path, 'r', encoding='utf-8') as file:
@@ -94,7 +96,7 @@ def get_course(courseTitle):
             return jsonify({
                 'error': f'Error reading course file: {str(e)}'
             }), 500
-            
+
     except Exception as e:
         return jsonify({
             'error': f'Server error: {str(e)}',

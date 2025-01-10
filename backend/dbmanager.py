@@ -3,7 +3,9 @@ from hashlib import sha256
 from cryptography.fernet import Fernet
 from token_system import decrypt_token, encrypt_token, hash_token
 
-from mysql import connector
+# from mysql import connector
+from pymysql import connect
+import pymysql
 import json, string, random
 import sys
 
@@ -12,12 +14,14 @@ filename = "../db_secrets.json" if len(sys.argv) == 1 else "db_secrets.json"
 with open(filename, "r") as f:
     db_secrets = json.load(f)
 
-sql = connector.connect(port=3306,
+sql = connect(port=3306,
                         database=db_secrets['name'],
-                        user=db_secrets['un'],
-                        password=db_secrets['pw'])
+                        user=db_secrets['un'])
 
-cursor = sql.cursor(buffered=True)
+#,
+#password=db_secrets['pw']
+
+cursor = sql.cursor()
 
 base_date = datetime(1900, 1, 1).date()
 
@@ -45,7 +49,7 @@ def add_user(name: str, password, pw2, user_email, is_discord, discord_data: DCD
         raise ValueError("Passwords do not match")
 
     cursor.execute("INSERT INTO profile (username, description, streak) VALUES (%s, %s, %s)",
-                   params=(name, "", 0))
+                   args=(name, "", 0))
 
     profile_id = cursor.lastrowid
 
@@ -55,14 +59,15 @@ def add_user(name: str, password, pw2, user_email, is_discord, discord_data: DCD
         ...
     else:
         cursor.execute("INSERT INTO classical_registration (email, password) VALUES (%s, %s)",
-                       params=(user_email, sha256(password.encode('utf-8')).hexdigest()))
+                       args=(user_email, sha256(password.encode('utf-8')).hexdigest()))
         registration_id = cursor.lastrowid
 
-    res, token = encrypt_token(generate_token())
+    token = generate_token()
+    res, ntoken = encrypt_token(token)
 
     cursor.execute(
         "INSERT INTO user (isDiscord, profile_id, registration_id, token, hashed_token, username, joined, isAccountValid) VALUES "
-        "(%s,%s,%s,%s,%s,%s,%s,%s)", params=(is_discord, profile_id, registration_id, token, hash_token(token),
+        "(%s,%s,%s,%s,%s,%s,%s,%s)", args=(is_discord, profile_id, registration_id, ntoken, hash_token(token),
                                           name.lower(), datetime.now(), True))
 
     sql.commit()
@@ -110,8 +115,10 @@ def get_user_by_token(token):
     if token is None:
         return
 
+    print(hash_token(token))
     cursor.execute("SELECT * FROM user WHERE hashed_token = %s", (hash_token(token),))
     row = cursor.fetchone()
+    print(row)
     if not row:
         return False
 
@@ -142,6 +149,3 @@ def change_bio(token, new_bio):
     sql.commit()
 
     return True
-
-# cursor.close()
-cursor.execute("")

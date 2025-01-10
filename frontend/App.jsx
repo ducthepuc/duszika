@@ -16,11 +16,20 @@ function ProtectedRoute({ children }) {
   return children;
 }
 
+function AuthorizerPage() {
+    if (localStorage.getItem("userToken")) {
+        return <Navigate to="/homepage" replace />;
+    }else
+    {
+        return <Navigate to="/login" replace />;
+    }
+
+}
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/" element={<AuthorizerPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/creator" element={<Creator />} />

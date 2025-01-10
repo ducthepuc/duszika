@@ -5,7 +5,6 @@ from PIL import Image
 user_bp = Blueprint('generic_user', __name__)
 
 
-
 # @user_bp.route('/api/v1/<path:uid>/picture', methods=['GET'])
 # def get_pfp(uid):
 #     return f"UID: {uid}"
@@ -33,6 +32,7 @@ def change_user():
 
     return {"response": True}
 
+
 @user_bp.route('/api/me')
 def get_me():
     auth = request.headers.get("Authorization")
@@ -42,7 +42,7 @@ def get_me():
             "result": False,
             "reason": "Please provide a valid user key"
         }
-    
+
     usr = dbm.get_user_by_token(auth)
     if not usr:
         return {
@@ -56,14 +56,18 @@ def get_me():
         return {
             "result": False,
             "reason": "Invalid profile id"
-        } 
+        }
 
     return {
         "username": profile[1],
         "bio": profile[2],
         "streak": profile[3],
-        "profilePicture": f"http://localhost:5000/cdn/pfp/{usr[0]}"
+        "profilePicture": f"http://localhost:5000/cdn/pfp/{usr[0]}",
+        "role": usr[9],
+        "mention": usr[6],
+        "member_since": usr[7]
     }
+
 
 @user_bp.route('/api/change_pfp', methods=['POST'])
 def change_pfp():
@@ -74,14 +78,14 @@ def change_pfp():
             "result": False,
             "reason": "Please provide a valid user key"
         }
-    
+
     usr = dbm.get_user_by_token(auth)
     if not usr:
         return {
             "result": False,
             "reason": "User not found"
         }
-    
+
     uid = usr[0]
 
     file_stream = request.files.get('pfp')
