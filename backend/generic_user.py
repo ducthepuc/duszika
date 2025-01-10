@@ -94,13 +94,14 @@ def change_pfp():
     img.verify()
 
     width, height = img.size
-
-    if width > 200 or height > 200:
+    if width > 350 or height > 350:
         return {
             "result": False
         }
+    
+    img = Image.open(file_stream.stream)
+    img.save(f'../cdn/images/{uid}.png')
 
-    file_stream.save(f'../cdn/images/{uid}.png')
 
     return {
         "result": True

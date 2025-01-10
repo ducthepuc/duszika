@@ -115,10 +115,8 @@ def get_user_by_token(token, verbose = False):
     if token is None:
         return
 
-    print(hash_token(token))
     cursor.execute("SELECT * FROM user WHERE hashed_token = %s", (hash_token(token),))
     row = cursor.fetchone()
-    print(row)
     if not row:
         return False
 
