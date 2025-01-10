@@ -43,7 +43,7 @@ def get_me():
             "reason": "Please provide a valid user key"
         }
 
-    usr = dbm.get_user_by_token(auth)
+    usr = dbm.get_user_by_token(auth, True)
     if not usr:
         return {
             "result": False,

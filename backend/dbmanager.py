@@ -111,7 +111,7 @@ def login_user_via_auth(email, password):
     return new_row
 
 
-def get_user_by_token(token):
+def get_user_by_token(token, verbose = False):
     if token is None:
         return
 
@@ -122,7 +122,10 @@ def get_user_by_token(token):
     if not row:
         return False
 
+    if verbose:
+        return row
     return row[0], row[5], row[2]
+
 
 
 def get_profile(profile_id):
