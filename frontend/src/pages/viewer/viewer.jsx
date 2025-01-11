@@ -20,6 +20,66 @@ function Viewer() {
   const [showHelp, setShowHelp] = useState(false);
 
   useEffect(() => {
+    const loadProgress = async () => {
+      const token = localStorage.getItem('userToken');
+      if (!token || !courseData) return;
+
+      try {
+        const response = await fetch(`http://localhost:5000/api/course_progress/${courseTitle}`, {
+          headers: {
+            'Authorization': token
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.currentStep !== undefined) {
+            setCurrentIndex(data.currentStep);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to load progress:', error);
+      }
+    };
+
+    loadProgress();
+  }, [courseData, courseTitle]);
+
+  useEffect(() => {
+    const saveProgress = async () => {
+      if (!courseData || !courseData.elements) return;
+
+      const token = localStorage.getItem('userToken');
+      if (!token) return;
+
+      const progress = ((currentIndex + 1) / courseData.elements.length) * 100;
+      
+      try {
+        const user = await fetch('http://localhost:5000/api/me', {
+          headers: { 'Authorization': token }
+        }).then(res => res.json());
+
+        await fetch(`http://localhost:5000/api/course_progress/${courseTitle}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token
+          },
+          body: JSON.stringify({
+            currentStep: currentIndex,
+            totalSteps: courseData.elements.length,
+            userId: user.id
+          })
+        });
+      } catch (error) {
+        console.error('Failed to save progress:', error);
+      }
+    };
+
+    saveProgress();
+  }, [currentIndex, courseData, courseTitle]);
+
+  useEffect(() => {
     const fetchCourseData = async () => {
       setIsLoading(true);
       try {
@@ -30,7 +90,6 @@ function Viewer() {
           throw new Error(data.error || `HTTP error! status: ${response.status}`);
         }
 
-        // Validate course data
         if (!data || !Array.isArray(data.elements)) {
           throw new Error('Invalid course data structure');
         }
@@ -292,12 +351,10 @@ function Viewer() {
     ).length;
   }, [courseData]);
 
-  // Loading state
   if (isLoading) {
     return <div className="flex justify-center items-center h-screen">Loading course...</div>;
   }
 
-  // Error state
   if (!courseData || !courseData.elements || courseData.elements.length === 0) {
     return (
         <div className="flex justify-center items-center h-screen flex-col">
@@ -314,7 +371,6 @@ function Viewer() {
     );
   }
 
-  // Main render
   return (
       <div className="max-w-4xl mx-auto p-5">
         <h1 className="text-3xl font-bold mb-4">{courseData.title}</h1>

@@ -1,7 +1,10 @@
 from flask import Blueprint, request, jsonify
+from flask_cors import CORS
 import dbmanager as dbm
 
 auth_bp = Blueprint('auth', __name__)
+
+CORS(auth_bp, origins=["http://localhost:3000"], methods=["GET", "POST", "OPTIONS"])
 
 @auth_bp.route('/api/uauth:def', methods=["POST"])
 def user_auth():
@@ -61,3 +64,47 @@ def get_user():
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+@auth_bp.route('/api/me')
+def get_me():
+    auth = request.headers.get("Authorization")
+    print(f"GET /api/me - Auth token: {auth}")
+
+    if auth is None:
+        print("No auth token provided")
+        return {
+            "result": False,
+            "reason": "Please provide a valid user key"
+        }
+    
+    usr = dbm.get_user_by_token(auth)
+    print(f"User data from token: {usr}")
+    
+    if not usr:
+        print("User not found for token")
+        return {
+            "result": False,
+            "reason": "User not found"
+        }
+    
+    profile_id = usr[0]
+    profile = dbm.get_profile(profile_id)
+    print(f"Profile data: {profile}")
+
+    if not profile:
+        print("Invalid profile id")
+        return {
+            "result": False,
+            "reason": "Invalid profile id"
+        } 
+
+    response = {
+        "username": profile[1],
+        "bio": profile[2],
+        "streak": profile[3],
+        "profilePicture": f"http://localhost:5000/cdn/pfp/{usr[0]}",
+        "id": usr[0]
+    }
+    print(f"Sending response: {response}")
+    return response

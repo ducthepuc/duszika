@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 function RegisterPage() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
     confirm_password: ''
   });
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     setFormData({
@@ -19,15 +21,27 @@ function RegisterPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch('http://localhost:5000/api/user_make:def', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    });
-    const data = await response.json();
-    console.log(data);
+    setError('');
+    
+    try {
+      const response = await fetch('http://localhost:5000/api/user_make:def', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        navigate('/login');
+      } else {
+        setError(data.error || 'Registration failed. Please try again.');
+      }
+    } catch (error) {
+      setError('An error occurred. Please try again.');
+    }
   };
 
   return (
@@ -38,107 +52,110 @@ function RegisterPage() {
         <Link style={{ color: '#FF6B35', textDecoration: 'none' }} to="/login">Login!</Link>
       </p>
       <div style={{ maxWidth: '500px', margin: '0 auto', padding: '20px', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+        {error && (
+          <div style={{ 
+            color: '#ff4444', 
+            backgroundColor: '#ffebee', 
+            padding: '10px', 
+            borderRadius: '4px', 
+            marginBottom: '15px' 
+          }}>
+            {error}
+          </div>
+        )}
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-          <label htmlFor="username" style={{ fontWeight: 'bold' }}>Username</label>
+          <label htmlFor="name" style={{ fontWeight: 'bold' }}>Username</label>
           <motion.input
             style={{
-                color: 'rgb(240, 240, 240)',
-                backgroundColor: '#333333',
+              color: 'rgb(240, 240, 240)',
+              backgroundColor: '#333333',
               padding: '10px',
               borderRadius: '4px',
               border: '1px solid #555',
               fontSize: '1rem',
             }}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.9 }}
+            whileFocus={{ scale: 1.02, borderColor: '#FF6B35' }}
             type="text"
-            id="username"
+            id="name"
+            name="name"
             value={formData.name}
             onChange={handleChange}
-            name="name"
             required
-            placeholder="/:"
           />
-          <br/>
-          <label htmlFor="email" style={{ fontWeight: 'bold' }}>E-mail</label>
+          
+          <label htmlFor="email" style={{ fontWeight: 'bold' }}>Email</label>
           <motion.input
             style={{
-                color: 'rgb(240, 240, 240)',
-                backgroundColor: '#333333',
+              color: 'rgb(240, 240, 240)',
+              backgroundColor: '#333333',
               padding: '10px',
               borderRadius: '4px',
               border: '1px solid #555',
               fontSize: '1rem',
             }}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.9 }}
+            whileFocus={{ scale: 1.02, borderColor: '#FF6B35' }}
             type="email"
             id="email"
+            name="email"
             value={formData.email}
             onChange={handleChange}
-            name="email"
             required
-            placeholder="/:"
           />
-          <br/>
+          
           <label htmlFor="password" style={{ fontWeight: 'bold' }}>Password</label>
           <motion.input
             style={{
-                color: 'rgb(240, 240, 240)',
-                backgroundColor: '#333333',
+              color: 'rgb(240, 240, 240)',
+              backgroundColor: '#333333',
               padding: '10px',
               borderRadius: '4px',
               border: '1px solid #555',
               fontSize: '1rem',
             }}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.9 }}
+            whileFocus={{ scale: 1.02, borderColor: '#FF6B35' }}
             type="password"
             id="password"
+            name="password"
             value={formData.password}
             onChange={handleChange}
-            name="password"
             required
-            placeholder="/:"
           />
-          <br/>
+          
+          <label htmlFor="confirm_password" style={{ fontWeight: 'bold' }}>Confirm Password</label>
           <motion.input
             style={{
-                color: 'rgb(240, 240, 240)',
-                backgroundColor: '#333333',
+              color: 'rgb(240, 240, 240)',
+              backgroundColor: '#333333',
               padding: '10px',
               borderRadius: '4px',
               border: '1px solid #555',
               fontSize: '1rem',
             }}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.9 }}
+            whileFocus={{ scale: 1.02, borderColor: '#FF6B35' }}
             type="password"
             id="confirm_password"
+            name="confirm_password"
             value={formData.confirm_password}
             onChange={handleChange}
-            name="confirm_password"
             required
-            placeholder="Repeat /:"
           />
-          <br/>
+          
           <motion.button
             type="submit"
             style={{
-              padding: '12px 20px',
-              borderRadius: '4px',
               backgroundColor: '#FF6B35',
               color: 'white',
-              fontSize: '1rem',
+              padding: '10px 20px',
               border: 'none',
+              borderRadius: '4px',
+              fontSize: '1rem',
               cursor: 'pointer',
-              transition: 'all 0.2s ease-in-out',
-              alignSelf: 'center',
+              marginTop: '10px',
             }}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.9 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
-            CREATE ➢
+            Register
           </motion.button>
         </form>
       </div>

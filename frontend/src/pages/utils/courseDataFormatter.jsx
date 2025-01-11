@@ -1,7 +1,8 @@
-export const formatCourseData = (title, description, steps) => {
+export const formatCourseData = (title, description, steps, tags) => {
     return {
         title,
         description,
+        tags: tags || [],
         elements: steps.map(step => {
             if (step.type === 'code-task') {
                 return {

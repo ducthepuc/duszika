@@ -70,6 +70,51 @@ CREATE TABLE `profile` (
 -- Table structure for table `user`
 --
 
+DROP TABLE IF EXISTS `course_progress`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE course_progress (
+    user_id INT NOT NULL,
+    course_title VARCHAR(255) NOT NULL,
+    progress FLOAT NOT NULL DEFAULT 0,
+    current_step INT NOT NULL DEFAULT 0,
+    last_accessed TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, course_title)
+);
+--
+-- Table structure for table `user`
+--
+
+DROP TABLE IF EXISTS `course_stars`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+DROP TABLE IF EXISTS `course_stars`;
+CREATE TABLE `course_stars` (
+    `user_id` INT NOT NULL,
+    `course_id` VARCHAR(255) NOT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`user_id`, `course_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+--
+-- Table structure for table `user`
+--
+
+DROP TABLE IF EXISTS `course_tags`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `course_tags` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `course_id` VARCHAR(255) NOT NULL,
+    `tag` VARCHAR(50) NOT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    INDEX `idx_tag` (`tag`),
+    INDEX `idx_course` (`course_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+--
+-- Table structure for table `user`
+--
+
 DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;

@@ -1,0 +1,39 @@
+{
+  "title": "Course Test",
+  "description": "Flare course test",
+  "tags": [
+    "flare",
+    "test",
+    "beta"
+  ],
+  "elements": [
+    {
+      "type": "lesson",
+      "content": [
+        {
+          "type": "text-block",
+          "text": "This is Flare 2.0"
+        }
+      ]
+    },
+    {
+      "type": "question",
+      "questionText": "What do ya'll think?",
+      "answers": [
+        {
+          "text": "Lovely",
+          "correct": true
+        },
+        {
+          "text": "Meh",
+          "correct": false
+        },
+        {
+          "text": "Bad",
+          "correct": false
+        }
+      ]
+    }
+  ],
+  "creator": "gregory"
+}
