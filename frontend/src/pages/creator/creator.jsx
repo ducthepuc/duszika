@@ -79,6 +79,7 @@ function CourseCreator() {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': localStorage.getItem("userToken")
                     },
                     body: JSON.stringify(courseData),
                 });

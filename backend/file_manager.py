@@ -2,7 +2,8 @@ import os
 import json
 from flask import request, jsonify, Blueprint, send_from_directory
 from werkzeug.utils import secure_filename
-import urllib.parse
+import uuid
+from typing import Tuple, List
 
 file_bp = Blueprint("file_manager", __name__)
 
@@ -18,15 +19,39 @@ def get_course_names_from_files():
     return course_names
 
 
+def get_course_objects() -> List[Tuple[str, str]]:
+    course_data: List[Tuple[str, str]] = []
+    for course in os.listdir(COURSE_DIRECTORY):
+        if course.endswith(".json"):
+            course_id = course.split(".")[0]
+            with open(os.path.join(COURSE_DIRECTORY, course)) as f:
+                course_data.append((course_id, json.load(f)["title"]))
+
+    return course_data
+
+
 @file_bp.route('/api/file_upload', methods=['POST'])
 def save_course():
     try:
+        auth = request.headers.get("Authorization")
+        if not auth:
+            return {
+                "result": False,
+                "reason": "Authorization fail"
+            }
+
         course_data = request.json
 
         if not course_data:
             return jsonify({"error": "No JSON data received"}), 400
 
-        course_title = course_data.get('title', 'untitled_course').replace(' ', '_')
+        gen_name = uuid.uuid4()
+        print(get_course_names_from_files())
+        while gen_name in get_course_names_from_files():
+            gen_name = uuid.uuid4()
+
+        print("apple")
+        course_title = course_data.get('title', 'untitled_course')
         course_data['title'] = course_title
 
         course_names = get_course_names_from_files()
@@ -41,7 +66,7 @@ def save_course():
             'elements']:
             return jsonify({"error": "Course elements cannot be empty"}), 400
 
-        file_path = os.path.join(save_directory, f"{course_title}.json")
+        file_path = os.path.join(save_directory, f"{gen_name}.json")
         with open(file_path, 'w') as f:
             json.dump(course_data, f, indent=2)
 
@@ -51,6 +76,7 @@ def save_course():
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
 
 
+# Ez borzalmas fos
 @file_bp.route('/api/get_course_names', methods=['GET'])
 def get_course_names():
     try:
@@ -60,47 +86,16 @@ def get_course_names():
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
 
 
-@file_bp.route('/api/courses/<courseTitle>', methods=['GET'])
-def get_course(courseTitle):
-    try:
-        # Decode the URL-encoded course title and replace spaces with underscores
-        courseTitle = urllib.parse.unquote(courseTitle).replace(' ', '_')
+@file_bp.route("/api/get_course_objects")
+def course_objects():
+    return jsonify({
+        "response": True,
+        "result": get_course_objects(),
+    })
 
-        # Sanitize the course title and ensure it has .json extension
-        filename = secure_filename(courseTitle) + '.json'
 
-        # Get absolute path to course directory
-        course_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), COURSE_DIRECTORY))
-        course_path = os.path.join(course_dir, filename)
+@file_bp.route('/api/courses/<courseId>', methods=['GET'])
+def get_course(courseId):
+    filename = secure_filename(courseId) + '.json'
 
-        # Check if the file exists
-        if not os.path.exists(course_path):
-            return jsonify({
-                'error': f'Course "{courseTitle}" not found',
-                'debug_info': {
-                    'requested_file': filename,
-                    'search_path': course_path
-                }
-            }), 404
-
-        # Read and return the course data
-        try:
-            with open(course_path, 'r', encoding='utf-8') as file:
-                course_data = json.load(file)
-                return jsonify(course_data)
-        except json.JSONDecodeError:
-            return jsonify({
-                'error': f'Invalid JSON format in course file: {filename}'
-            }), 500
-        except Exception as e:
-            return jsonify({
-                'error': f'Error reading course file: {str(e)}'
-            }), 500
-
-    except Exception as e:
-        return jsonify({
-            'error': f'Server error: {str(e)}',
-            'debug_info': {
-                'course_title': courseTitle
-            }
-        }), 500
+    return send_from_directory(COURSE_DIRECTORY, filename)

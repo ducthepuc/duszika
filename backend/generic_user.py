@@ -98,7 +98,7 @@ def change_pfp():
         return {
             "result": False
         }
-    
+
     img = Image.open(file_stream.stream)
     img.save(f'../cdn/images/{uid}.png')
 

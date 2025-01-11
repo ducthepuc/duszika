@@ -71,14 +71,17 @@ const HomePage = () => {
 
     const getCourseNames = async () => {
         try {
-            const response = await fetch('/api/get_course_names');
+            const response = await fetch('/api/get_course_objects');
             if (response.ok) {
                 const data = await response.json();
-                const courseNames = data.course_names;
-                const courses = courseNames.map((courseName, index) => ({
-                    id: index + 1,
-                    title: courseName
-                }));
+                const courseNamePairs = data.result;
+                const courses = courseNamePairs.map((courseObj, index) => {
+                    return {
+                        "id": index,
+                        "courseId": courseObj[0],
+                        "title": courseObj[1]
+                    }
+                })
                 setCourses(courses);
             } else {
                 console.error('Failed to fetch course names:', response.statusText);
@@ -96,6 +99,7 @@ const HomePage = () => {
         const filtered = courses.filter((card) => 
             card.title.toLowerCase().includes(searchInput.toLowerCase())
         );
+        console.log(filtered)
         setFilteredCards(filtered);
     }, [searchInput, courses]);
 
@@ -162,7 +166,7 @@ const HomePage = () => {
             {/* Course Cards */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '20px' }}>
                 {filteredCards.map((card) => (
-                    <Card key={card.id} onClick={() => handleCourseClick(card.title)}>
+                    <Card key={card.id} onClick={() => handleCourseClick(card.courseId)}>
                         <div style={{ padding: '10px' }}>
                             <h4 style={{ color: 'black' }}>{card.title}</h4>
                         </div>
