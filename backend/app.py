@@ -8,27 +8,14 @@ import socket
 import signal
 import sys
 import atexit
+import socket
+import token_system as ts
 
 APP_PORT = 5000
 FRONTEND_PORT = 3000
 
 ORIGINS = [f"http://localhost:{FRONTEND_PORT}"]
 
-def cleanup_port():
-    """Cleanup function to release the port"""
-    try:
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.bind(('localhost', APP_PORT))
-        sock.close()
-        print(f"\nPort {APP_PORT} cleaned up successfully")
-    except socket.error:
-        print(f"\nPort {APP_PORT} was already free")
-
-def signal_handler(sig, frame):
-    """Handle Ctrl+C signal"""
-    print("\nReceived Ctrl+C. Cleaning up...")
-    cleanup_port()
-    sys.exit(0)
 
 def is_port_in_use(port):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -38,8 +25,9 @@ def is_port_in_use(port):
         except socket.error:
             return True
 
+
 app = f.Flask(__name__)
-CORS(app, 
+CORS(app,
      resources={r"/api/*": {
          "origins": ORIGINS,
          "methods": ["GET", "POST", "OPTIONS", "PUT"],
@@ -47,6 +35,7 @@ CORS(app,
      }},
      supports_credentials=True)
 
+ts.initialize()
 app.register_blueprint(auth_bp)
 app.register_blueprint(user_bp)
 app.register_blueprint(file_bp)
@@ -54,6 +43,28 @@ app.register_blueprint(lurjs.lurjs_bp)
 app.register_blueprint(lurpy.lurpy_bp)
 app.register_blueprint(lurlua.lurlua_bp)
 
+
+def cleanup():
+    """Cleanup function to close database connections"""
+    print("Cleaning up database connections...")
+    cursor.close()
+    sql.close()
+    # Closing up the lighter key handling database
+    ts.DBHandler.instance.cursor.close()
+    ts.DBHandler.instance.db.close()
+    print("Cleanup completed")
+
+@app.route("/api/encrypt_test:<key>")
+def enctest(key):
+    return f.jsonify(ts.encrypt_token(key))
+
+@app.route("/api/decrypt_test:<key>")
+def dectest(key):
+    return f.jsonify(ts.decrypt_token(key))
+
+
+# Register the cleanup function to be called on exit
+atexit.register(cleanup)
 signal.signal(signal.SIGINT, signal_handler)
 atexit.register(cleanup_port)
 
@@ -70,12 +81,10 @@ def list_routes():
 
 if __name__ == '__main__':
     if is_port_in_use(APP_PORT):
-        print(f"Port {APP_PORT} is already in use. Attempting to clean up...")
-        cleanup_port()
-    
+        print(f"Port {APP_PORT} is already in use. Please free up the port and try again.")
+        exit(1)
+
     try:
-        app.run(port=APP_PORT, debug=True)
-    except KeyboardInterrupt:
-        print("\nShutting down gracefully...")
-        cleanup_port()
-        sys.exit(0)
+        app.run(debug=True, use_reloader=False, port=APP_PORT)
+    finally:
+        cleanup()

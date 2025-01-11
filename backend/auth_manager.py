@@ -51,6 +51,8 @@ def get_user():
             return jsonify({'error': 'No token provided'}), 400
 
         user_data = dbm.get_user_by_token(token)
+        if not user_data:
+            return jsonify({'error': "User not found"}), 500
         profile_data = dbm.get_profile(user_data[2])
 
         if user_data:

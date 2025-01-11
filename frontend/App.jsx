@@ -9,6 +9,23 @@ import ProfilePage from './src/pages/profile/profile';
 import PanelPage from './src/pages/panel/panel';
 import './app.scss';
 
+function ProtectedRoute({ children }) {
+  const token = localStorage.getItem('userToken');
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+  return children;
+}
+
+function AuthorizerPage() {
+    if (localStorage.getItem("userToken")) {
+        return <Navigate to="/homepage" replace />;
+    }else
+    {
+        return <Navigate to="/login" replace />;
+    }
+
+}
 function App() {
     return (
         <Router>

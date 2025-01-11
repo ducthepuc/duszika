@@ -1,7 +1,11 @@
 from datetime import datetime, timedelta
 from hashlib import sha256
+from cryptography.fernet import Fernet
+from token_system import decrypt_token, encrypt_token, hash_token
 import mysql.connector
-from mysql.connector import pooling
+# from mysql.connector import pooling
+from pymysql import connect
+import pymysql
 import json, string, random
 import sys
 import os
@@ -244,17 +248,26 @@ def add_user(name: str, password, pw2, user_email, is_discord, discord_data: DCD
         registration_id = cursor.lastrowid
 
     token = generate_token()
-    execute_query(
-        "INSERT INTO user (isDiscord, profile_id, registration_id, token, username, joined, isAccountValid, role) "
-        "VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",
-        (is_discord, profile_id, registration_id, token, name.lower(), datetime.now(), True, 'basic'),
-        commit=True
-    )
+    res, ntoken = encrypt_token(token)
+
+    cursor.execute(
+        "INSERT INTO user (isDiscord, profile_id, registration_id, token, hashed_token, username, joined, isAccountValid) VALUES "
+        "(%s,%s,%s,%s,%s,%s,%s,%s)", args=(is_discord, profile_id, registration_id, ntoken, hash_token(token),
+                                          name.lower(), datetime.now(), True))
+
+    sql.commit()
+
 
 def get_user(id):
     cursor = execute_query("SELECT * FROM user WHERE id = %s", (id,))
     row = cursor.fetchone()
-    return row
+
+    res, real_token = decrypt_token(row[4])
+    if not res: return None
+
+    new_row = list(row)
+    new_row[4] = real_token
+    return new_row
 
 def change_password(id, password):
     user = get_user(id)
@@ -279,21 +292,28 @@ def login_user_via_auth(email, password):
     if user is None:
         raise ValueError("User not found!")
 
-    return user
+    res, real_token = decrypt_token(user[4])
+    if not res: return None
 
-def get_user_by_token(token):
-    try:
-        print(f"Getting user by token: {token}")
-        cursor = execute_query("SELECT * FROM user WHERE token = %s", (token,))
-        row = cursor.fetchone()
-        if not row:
-            print("No user found for token")
-            return None
-        print(f"Found user: id={row[0]}, username={row[5]}, profile_id={row[2]}")
-        return row[0], row[5], row[2]
-    except Exception as e:
-        print(f"Error in get_user_by_token: {e}")
-        return None
+    new_row = list(user)
+    new_row[4] = real_token
+    return new_row
+
+
+def get_user_by_token(token, verbose = False):
+    if token is None:
+        return
+
+    cursor.execute("SELECT * FROM user WHERE hashed_token = %s", (hash_token(token),))
+    row = cursor.fetchone()
+    if not row:
+        return False
+
+    if verbose:
+        return row
+    return row[0], row[5], row[2]
+
+
 
 def get_profile(profile_id):
     cursor = execute_query("SELECT * FROM profile WHERE id = %s", (profile_id,))
@@ -302,12 +322,16 @@ def get_profile(profile_id):
 def change_display_name(token, new_name):
     usr = get_user_by_token(token)
     if not usr:
+        return False
+    if not usr:
         raise ValueError("Invalid token")
     execute_query(
         "UPDATE profile SET username = %s WHERE id = %s",
         (new_name, usr[2]),
         commit=True
     )
+
+    return True
 
 def change_bio(token, new_bio):
     usr = get_user_by_token(token)

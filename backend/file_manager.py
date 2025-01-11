@@ -13,6 +13,7 @@ CORS(file_bp)
 
 COURSE_DIRECTORY = '../cdn/courses'
 
+
 def get_course_names_from_files():
     course_data = []
     course_dir = os.path.join(os.path.dirname(__file__), COURSE_DIRECTORY)
@@ -69,9 +70,28 @@ def get_course_objects() -> List[Tuple[str, str, str, List[str]]]:
     print(f"Returning {len(course_data)} courses")
     return course_data
 
+
+def get_course_objects() -> List[Tuple[str, str]]:
+    course_data: List[Tuple[str, str]] = []
+    for course in os.listdir(COURSE_DIRECTORY):
+        if course.endswith(".json"):
+            course_id = course.split(".")[0]
+            with open(os.path.join(COURSE_DIRECTORY, course)) as f:
+                course_data.append((course_id, json.load(f)["title"]))
+
+    return course_data
+
+
 @file_bp.route('/api/file_upload', methods=['POST'])
 def save_course():
     try:
+        auth = request.headers.get("Authorization")
+        if not auth:
+            return {
+                "result": False,
+                "reason": "Authorization fail"
+            }
+
         course_data = request.json
         user_token = request.headers.get('Authorization')
         print("=== Debug Info ===")
@@ -114,6 +134,12 @@ def save_course():
         if not course_data:
             return jsonify({"error": "No JSON data received"}), 400
 
+        gen_name = uuid.uuid4()
+        print(get_course_names_from_files())
+        while gen_name in get_course_names_from_files():
+            gen_name = uuid.uuid4()
+
+        print("apple")
         course_title = course_data.get('title', 'untitled_course')
         course_data['title'] = course_title
         print(f"Processing course with title: {course_title}")
@@ -130,7 +156,8 @@ def save_course():
         os.makedirs(save_directory, exist_ok=True)
         print(f"Saving to directory: {save_directory}")
 
-        if 'elements' not in course_data or not isinstance(course_data['elements'], list) or not course_data['elements']:
+        if 'elements' not in course_data or not isinstance(course_data['elements'], list) or not course_data[
+            'elements']:
             return jsonify({"error": "Course elements cannot be empty"}), 400
 
         # Save course metadata to database
