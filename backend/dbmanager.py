@@ -27,6 +27,11 @@ dbconfig = {
     "pool_reset_session": True
 }
 
+sql = mysql.connector.connect(**dbconfig)
+cursor = sql.cursor(buffered=True)
+
+__all__ = ['sql', 'cursor']
+
 def get_connection():
     try:
         return connection_pool.get_connection()
@@ -125,7 +130,10 @@ def initialize_database():
 def migrate_courses_from_files():
     """Migrate existing courses from JSON files to the database."""
     try:
-        execute_query("DELETE FROM course_tags", commit=True)
+        for course_id, tags in get_existing_course_tags().items():
+            if not os.path.exists(os.path.join(os.path.dirname(__file__), f'../cdn/courses/{course_id}.json')):
+                execute_query("DELETE FROM course_tags WHERE course_id = %s", (course_id,), commit=True)
+
         execute_query("DELETE FROM course_stars", commit=True)
         execute_query("DELETE FROM courses", commit=True)
         print("Cleared existing course data")
@@ -197,7 +205,6 @@ def migrate_courses_from_files():
     except Exception as e:
         print(f"Error during batch migration: {e}")
         raise
-
 try:
     initialize_database()
     cursor = execute_query("SELECT COUNT(*) FROM courses")
@@ -552,3 +559,39 @@ def delete_course(course_id):
     except Exception as e:
         print(f"Error deleting course: {e}")
         return False
+
+def sync_courses_with_filesystem():
+    course_dir = os.path.join(os.path.dirname(__file__), '../cdn/courses')
+    existing_files = {f[:-5] for f in os.listdir(course_dir) if f.endswith('.json')}
+
+    cursor = execute_query("SELECT id FROM courses")
+    db_courses = {row[0] for row in cursor.fetchall()}
+
+    courses_to_remove = db_courses - existing_files
+    for course_id in courses_to_remove:
+        delete_course(course_id)
+
+def get_course_data(course_id):
+    course_path = os.path.join(os.path.dirname(__file__), f'../cdn/courses/{course_id}.json')
+    if not os.path.exists(course_path):
+        return None
+
+    with open(course_path) as f:
+        return json.load(f)
+
+def update_course_progress(user_id, course_id, progress, current_step):
+    execute_query("""
+        INSERT INTO course_progress (user_id, course_id, progress, current_step)
+        VALUES (%s, %s, %s, %s)
+        ON DUPLICATE KEY UPDATE
+        progress = %s, current_step = %s
+    """, (user_id, course_id, progress, current_step, progress, current_step), commit=True)
+
+def get_existing_course_tags():
+    cursor = execute_query("""
+        SELECT course_id, GROUP_CONCAT(DISTINCT tag)
+        FROM course_tags
+        GROUP BY course_id
+    """)
+    return {row[0]: set(row[1].split(',')) if row[1] else set() for row in cursor.fetchall()}
+

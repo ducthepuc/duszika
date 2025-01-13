@@ -19,10 +19,10 @@ const formatStarCount = (count) => {
 export const fetchUsername = async (navigate, setUsername, setIsLoading, setPfp) => {
     const user_token = localStorage.getItem("userToken");
 
-    if (!user_token) {
+    /* if (!user_token) {
         navigate('/login');
         return;
-    }
+    } */
 
     try {
         const response = await fetch('http://localhost:5000/api/me', {
@@ -242,7 +242,8 @@ const HomePage = () => {
         const fetchUserData = async () => {
             const user_token = localStorage.getItem("userToken");
             if (!user_token) {
-                navigate('/login');
+                setUsername('Guest');
+                setIsLoading(false);
                 return;
             }
 
@@ -268,7 +269,8 @@ const HomePage = () => {
             } catch (error) {
                 console.error("Error fetching user data:", error);
                 localStorage.removeItem("userToken");
-                navigate('/login');
+                setUsername('Guest');
+                setIsLoading(false);
             }
         };
 

@@ -4,16 +4,16 @@ from auth_manager import auth_bp
 from generic_user import user_bp
 from file_manager import file_bp
 from lur import lurjs, lurpy, lurlua
-import socket
-import signal
-import sys
+from dbmanager import cursor, sql
 import atexit
 import socket
 import token_system as ts
 
+# Define a specific port for the application
 APP_PORT = 5000
 FRONTEND_PORT = 3000
 
+# Update ORIGINS to only use the specific frontend port
 ORIGINS = [f"http://localhost:{FRONTEND_PORT}"]
 
 
@@ -65,19 +65,6 @@ def dectest(key):
 
 # Register the cleanup function to be called on exit
 atexit.register(cleanup)
-signal.signal(signal.SIGINT, signal_handler)
-atexit.register(cleanup_port)
-
-@app.route('/debug/routes')
-def list_routes():
-    routes = []
-    for rule in app.url_map.iter_rules():
-        routes.append({
-            'endpoint': rule.endpoint,
-            'methods': list(rule.methods),
-            'path': str(rule)
-        })
-    return f.jsonify(routes)
 
 if __name__ == '__main__':
     if is_port_in_use(APP_PORT):

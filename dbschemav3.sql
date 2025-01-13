@@ -74,12 +74,13 @@ DROP TABLE IF EXISTS `course_progress`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE course_progress (
+    id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
-    course_title VARCHAR(255) NOT NULL,
+    course_id VARCHAR(255) NOT NULL,
     progress FLOAT NOT NULL DEFAULT 0,
     current_step INT NOT NULL DEFAULT 0,
     last_accessed TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY (user_id, course_title)
+    UNIQUE KEY unique_user_course (user_id, course_id)
 );
 --
 -- Table structure for table `user`
